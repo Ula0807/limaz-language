@@ -114,5 +114,94 @@ $("startPractice").onclick=()=>$("practice").scrollIntoView({behavior:"smooth",b
 $("settingsBtn").onclick=()=>{if(confirm("Вернуться к приветствию, чтобы изменить имя и языки? Текущий прогресс и словарь сохранятся.")){profile.name="";save();renderWelcome()}};
 renderWelcome();
 </script>
+  <script>
+(() => {
+  const form = document.getElementById("chatForm");
+  const input = document.getElementById("chatInput");
+  const chat = document.getElementById("chat");
+  const notice = document.getElementById("notice");
+
+  if (!form || !input || !chat) return;
+
+  const endpoint = "https://limaz-ai-tutor.ulaendv.workers.dev/";
+  const history = [];
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const message = input.value.trim();
+    if (!message) return;
+
+    const button = form.querySelector("button");
+    if (button.disabled) return;
+
+    const addMessage = (text, type) => {
+      const bubble = document.createElement("div");
+      bubble.className = "bubble " + type;
+      bubble.textContent = text;
+      chat.appendChild(bubble);
+      chat.scrollTop = chat.scrollHeight;
+      return bubble;
+    };
+
+    addMessage(message, "user");
+    input.value = "";
+    input.disabled = true;
+    button.disabled = true;
+
+    const waiting = addMessage("Готовлю ответ… 💙", "tutor");
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          language:
+            typeof activeLanguage !== "undefined" &&
+            activeLanguage === "es"
+              ? "испанский"
+              : "английский (американский вариант)",
+          history: history.slice(-12)
+        })
+      });
+
+      const data = await response.json();
+      waiting.remove();
+
+      if (!response.ok || !data.answer) {
+        throw new Error(data.error || "Не удалось получить ответ.");
+      }
+
+      addMessage(data.answer, "tutor");
+      history.push(
+        { role: "user", text: message },
+        { role: "model", text: data.answer }
+      );
+
+      if (history.length > 24) {
+        history.splice(0, history.length - 24);
+      }
+
+      if (notice) {
+        notice.textContent =
+          "Ты общаешься с ИИ-репетитором. Не отправляй личные данные.";
+      }
+    } catch (error) {
+      waiting.remove();
+      addMessage(
+        "Не удалось получить ответ от ИИ. " +
+          (error.message || "Попробуй ещё раз."),
+        "tutor"
+      );
+    } finally {
+      input.disabled = false;
+      button.disabled = false;
+      input.focus();
+    }
+  }, true);
+})();
+</script>
 </body>
 </html>
