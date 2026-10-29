@@ -1,207 +1,1479 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#edf4ff">
-<title>Мой AI-репетитор</title>
-<style>
-:root{--blue:#3978e8;--blue2:#2458b8;--pale:#eaf2ff;--ink:#1f2d42;--muted:#718096;--line:#e3ebf6;--bg:#f4f7fc;--white:#fff;--green:#26966c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
-button:focus-visible,input:focus-visible{outline:3px solid #8db7ff;outline-offset:2px}
-.primary{border:0;background:var(--blue);color:#fff;border-radius:13px;padding:13px 18px;font-weight:750;box-shadow:0 6px 15px #3978e82b}.primary:hover{background:var(--blue2)}
-/* First visit */
-.welcome-screen{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(130deg,#e7f1ff,#f8fbff 60%,#eaf3ff)}
-.welcome-art{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:35px;overflow:hidden;background:linear-gradient(160deg,#d9e8ff,#eff6ff 60%,#c7dcff)}
-.welcome-art:before,.welcome-art:after{content:"";position:absolute;border-radius:50%;background:#ffffff60}.welcome-art:before{width:360px;height:360px;top:-100px;left:-120px}.welcome-art:after{width:270px;height:270px;bottom:-100px;right:-50px}
-.logo{position:absolute;top:25px;left:28px;display:flex;align-items:center;gap:10px;font-weight:850;z-index:1}.logo-mark{width:38px;height:38px;border-radius:13px;background:var(--blue);color:white;display:grid;place-items:center}
-.welcome-characters{font-size:clamp(90px,13vw,170px);position:relative;z-index:1;filter:drop-shadow(0 15px 12px #315b8b25);white-space:nowrap}
-.welcome-slogan{position:relative;z-index:1;text-align:center;max-width:400px;margin-top:10px}.welcome-slogan h2{font-size:clamp(27px,4vw,43px);line-height:1.1;letter-spacing:-1px;margin:0 0 12px}.welcome-slogan p{margin:0;color:#536a89}
-.welcome-panel{display:flex;align-items:center;justify-content:center;padding:30px 22px}.welcome-form{width:min(100%,450px);background:#ffffffd9;border:1px solid #fff;border-radius:27px;padding:clamp(22px,4vw,38px);box-shadow:0 18px 55px #315b8b12;backdrop-filter:blur(12px)}
-.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;font-weight:850;color:var(--blue2)}.welcome-form h1{font-size:clamp(29px,4vw,39px);letter-spacing:-1px;line-height:1.13;margin:8px 0 10px}.welcome-form .intro{color:var(--muted);margin:0 0 23px}
-label{display:block;font-size:13px;font-weight:750;color:#53647c;margin:16px 0 8px}.name-input{width:100%;padding:14px 15px;border:1px solid #dce5f2;border-radius:13px;background:white;color:var(--ink)}
-.language-picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}.language-pick{border:1px solid var(--line);border-radius:16px;background:white;padding:14px;text-align:left;color:var(--ink);display:flex;align-items:center;gap:10px;min-height:76px}.language-pick .flag{font-size:26px}.language-pick strong{display:block;font-size:14px}.language-pick small{display:block;color:var(--muted);font-size:12px}.language-pick.selected{border:2px solid var(--blue);background:#f1f6ff;padding:13px;color:var(--blue2)}.language-pick .check{margin-left:auto;color:var(--blue);font-weight:900;opacity:0}.language-pick.selected .check{opacity:1}
-.pick-note{font-size:12px;color:var(--muted);margin:10px 0 18px}.start{width:100%;font-size:15px}.privacy-note{text-align:center;font-size:11px;color:#8a97a9;margin:13px 0 0}
-.topbar{background:#ffffffed;border-bottom:1px solid var(--line);padding:14px 20px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}.topbar-inner{max-width:1060px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:16px}.brand-mark{width:37px;height:37px;border-radius:13px;background:var(--blue);color:white;display:grid;place-items:center;font-size:20px}.top-actions{display:flex;align-items:center;gap:9px}.streak{background:#fff5e5;border:1px solid #ffe5b7;color:#925a00;border-radius:13px;padding:8px 11px;font-size:12px;font-weight:800;white-space:nowrap}.small-button{border:1px solid var(--line);background:white;border-radius:11px;padding:8px 10px;color:#53647c;font-size:12px;font-weight:700}
-main{max-width:1060px;margin:auto;padding:24px 18px 45px}.hero{display:grid;grid-template-columns:1.35fr .75fr;gap:17px;margin-bottom:17px}.hero-copy{background:linear-gradient(135deg,#e5efff,#f8fbff 75%);border:1px solid #d9e6fc;border-radius:24px;padding:26px}.hero-copy h1{font-size:clamp(27px,4vw,38px);line-height:1.13;letter-spacing:-1px;margin:9px 0 10px}.hero-copy p{color:#536782;margin:0 0 17px}.hero-art{border-radius:24px;background:linear-gradient(145deg,#c9dcff,#eaf3ff 65%,#d7e7ff);display:flex;align-items:center;justify-content:center;min-height:205px;position:relative;overflow:hidden}.hero-art .orb{position:absolute;width:170px;height:170px;border-radius:50%;background:#ffffff66;top:-50px;right:-30px}.character{font-size:92px;position:relative;z-index:1;filter:drop-shadow(0 10px 8px #274b7b20)}.art-caption{position:absolute;bottom:12px;left:12px;right:12px;text-align:center;background:#ffffffd9;border:1px solid #fff;border-radius:12px;padding:7px;font-size:12px;font-weight:750;color:#385276}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:17px}.stat,.card{background:white;border:1px solid var(--line);border-radius:19px;box-shadow:0 5px 18px #1c3d6807}.stat{padding:14px}.stat-label{font-size:12px;color:var(--muted);font-weight:650}.stat-value{font-size:24px;font-weight:850;margin:2px 0}.progress-track{height:7px;border-radius:99px;background:#edf1f8;overflow:hidden;margin-top:8px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#4c8cf3,#76b8ff);border-radius:99px;transition:width .3s}
-.layout{display:grid;grid-template-columns:.85fr 1.2fr;gap:17px;align-items:start}.card{padding:19px;margin-bottom:16px}.card h2{font-size:17px;margin:0 0 4px}.sub{font-size:12px;color:var(--muted);margin:0 0 14px}.language-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.lang-tab{border:1px solid var(--line);border-radius:99px;background:white;padding:8px 11px;color:#526781;font-size:12px;font-weight:750}.lang-tab.active{background:var(--blue);border-color:var(--blue);color:white}.character-options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.character-option{border:1px solid var(--line);background:white;border-radius:14px;padding:10px 6px;color:var(--ink);font-size:12px}.character-option .emoji{display:block;font-size:29px;margin-bottom:3px}.character-option.active{border:2px solid var(--blue);background:#f0f5ff;padding:9px 5px;color:var(--blue2);font-weight:800}
-.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.section-tile{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px 12px;text-align:left;color:var(--ink);min-height:105px}.section-tile.active{background:#f1f6ff;border-color:#a8c6ff}.tile-icon{display:block;font-size:23px;margin-bottom:7px}.section-tile strong{display:block;font-size:13px}.section-tile small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.chat-card{padding:0;overflow:hidden}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar{width:41px;height:41px;border-radius:13px;background:var(--pale);display:grid;place-items:center;font-size:25px}.chat-head strong{display:block;font-size:14px}.online{font-size:11px;color:var(--green)}.chat-body{padding:17px;min-height:220px;max-height:350px;overflow:auto;display:flex;flex-direction:column;gap:10px}.bubble{max-width:93%;padding:11px 13px;border-radius:15px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.bubble.tutor{background:#f0f4fa;border-top-left-radius:5px;align-self:flex-start}.bubble.user{background:#e5efff;border-top-right-radius:5px;align-self:flex-end}.chat-tools{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 13px}.chip{border:1px solid #dce6f7;background:#fff;color:#41618e;border-radius:99px;padding:7px 9px;font-size:11px}.chat-form{display:flex;gap:8px;padding:13px 15px;border-top:1px solid var(--line);background:#fbfcff}.chat-form input{min-width:0;flex:1;padding:11px 12px;border:1px solid #dce4f0;border-radius:12px;outline-color:var(--blue)}.chat-form button{border:0;border-radius:12px;background:var(--blue);color:white;padding:0 15px;font-weight:800}.notice{margin:0;padding:10px 16px 14px;color:var(--muted);font-size:11px;background:#fbfcff}
-.quiz-question{font-weight:750;font-size:15px;margin:14px 0}.answers{display:grid;gap:8px}.answer-option{border:1px solid var(--line);background:white;border-radius:12px;padding:11px;text-align:left;color:var(--ink);font-size:13px}.answer-option.selected{border:2px solid var(--blue);padding:10px;background:#f1f6ff}.answer-option.correct{border-color:#55b98e;background:#effaf5}.feedback{font-size:13px;margin-top:12px;color:#4c6583}.word-row{display:flex;gap:8px;margin:12px 0}.word-row input{min-width:0;width:100%;padding:10px;border:1px solid var(--line);border-radius:11px}.word-list{display:grid;gap:8px}.word-item{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px}.word-item small{display:block;color:var(--muted)}.remove-word{border:0;background:#f2f6fc;color:#62738b;border-radius:8px;padding:5px 8px}.empty{font-size:13px;color:var(--muted);padding:14px;background:#f8faff;border-radius:12px}.footer{text-align:center;color:#8a96a8;font-size:12px;padding:10px}
-@media(max-width:760px){.welcome-screen{grid-template-columns:1fr}.welcome-art{min-height:245px;padding:20px}.logo{top:15px;left:16px}.welcome-characters{font-size:95px;margin-top:25px}.welcome-slogan h2{font-size:26px}.welcome-slogan p{font-size:13px}.welcome-panel{padding:18px 13px 28px}.welcome-form{padding:24px 20px}.hero{grid-template-columns:1fr}.hero-art{min-height:145px}.character{font-size:72px}.stats{gap:7px}.stat{padding:11px 9px}.stat-value{font-size:21px}.stat-label{font-size:10px}.layout{grid-template-columns:1fr}main{padding:17px 12px 32px}.card{padding:16px}.chat-card{padding:0}.topbar{padding:11px 12px}.brand{font-size:14px}.streak{font-size:11px;padding:7px 8px}.small-button{font-size:11px;padding:7px 8px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#eaf2ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json">
+  <title>Мой AI-репетитор — Английский и Испанский</title>
+  <style>
+    :root {
+      --blue: #2f6fed;
+      --blue-dark: #1e52bd;
+      --blue-pale: #eaf2ff;
+      --blue-soft: #f4f8ff;
+      --ink: #1b2a41;
+      --muted: #6e7f96;
+      --line: #e1ebf7;
+      --bg: #eef4fc;
+      --white: #ffffff;
+      --green: #229b68;
+      --red: #e04f5f;
+      --amber: #f59e0b;
+      --shadow: 0 12px 32px rgba(34, 72, 136, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding-bottom: 84px;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; transition: all 0.18s ease; }
+    .hidden { display: none !important; }
+
+    /* ЭКРАН 1: ОНБОРДИНГ (ИМЯ, ЯЗЫК, УРОВЕНЬ, ПЕРСОНАЖ) */
+    .welcome-screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      background: linear-gradient(135deg, #dfeeff 0%, #f7faff 55%, #e5f0ff 100%);
+    }
+    .welcome-art {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      background: linear-gradient(160deg, #cbe0ff 0%, #eaf3ff 65%, #b8d4ff 100%);
+      text-align: center;
+    }
+    .welcome-characters {
+      font-size: clamp(86px, 12vw, 150px);
+      filter: drop-shadow(0 16px 20px rgba(35, 76, 145, 0.18));
+      margin-bottom: 16px;
+    }
+    .welcome-slogan h2 {
+      font-size: clamp(26px, 3.6vw, 40px);
+      margin: 0 0 12px;
+      color: #16325c;
+      letter-spacing: -0.8px;
+    }
+    .welcome-slogan p {
+      margin: 0;
+      color: #466085;
+      max-width: 380px;
+      font-size: 16px;
+    }
+    .welcome-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+    }
+    .welcome-form {
+      width: min(100%, 480px);
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid #fff;
+      border-radius: 28px;
+      padding: clamp(22px, 4vw, 36px);
+      box-shadow: var(--shadow);
+    }
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+    .welcome-form h1 {
+      font-size: clamp(24px, 3.5vw, 32px);
+      margin: 6px 0 8px;
+      letter-spacing: -0.6px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #4b5d75;
+      margin: 16px 0 8px;
+    }
+    .text-input {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 15px;
+    }
+    .text-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15);
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .pick-card {
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 12px 14px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pick-card.selected {
+      border: 2px solid var(--blue);
+      background: #f0f6ff;
+      color: var(--blue-dark);
+    }
+    .level-pills {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .level-pill {
+      border: 1.5px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 4px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .level-pill small {
+      display: block;
+      font-weight: 500;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .level-pill.selected {
+      border: 2px solid var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .level-pill.selected small { color: #dceaff; }
+    .primary-btn {
+      width: 100%;
+      border: 0;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 8px 20px rgba(47, 111, 237, 0.25);
+      margin-top: 20px;
+    }
+    .primary-btn:hover { background: var(--blue-dark); }
+
+    /* ШАПКА САЙТА */
+    .topbar {
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; }
+    .brand-mark {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: var(--blue); color: #fff;
+      display: grid; place-items: center; font-weight: 900;
+    }
+    .top-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      padding: 7px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--blue-pale);
+      color: var(--blue-dark);
+      border: 1px solid #d2e3ff;
+    }
+    .badge.streak { background: #fff5e5; border-color: #ffe2b3; color: #9a5b00; }
+
+    /* ОСНОВНОЙ КОНТЕЙНЕР (МАКЕТ КАК НА КАРТИНКЕ) */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 22px 16px;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    /* Приветствие и статы */
+    .greeting-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .avatar-circle {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      background: var(--blue-pale);
+      display: grid; place-items: center;
+      font-size: 32px;
+      border: 2px solid #d4e4ff;
+      flex-shrink: 0;
+    }
+    .greeting-text h2 { margin: 0 0 4px; font-size: 22px; }
+    .greeting-text p { margin: 0; color: var(--muted); font-size: 13.5px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1.5fr 0.85fr 0.85fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-box {
+      background: var(--blue-soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .stat-box small { color: var(--muted); font-size: 11.5px; display: block; margin-bottom: 4px; }
+    .stat-box strong { font-size: 16px; display: block; }
+    .progress-bar {
+      height: 8px;
+      background: #dce8fa;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    /* 4 карточки выбора как на макете */
+    .study-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .study-tile {
+      background: var(--blue-soft);
+      border: 1.5px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .study-tile:hover, .study-tile.active {
+      border-color: var(--blue);
+      background: #ebf3ff;
+      transform: translateY(-2px);
+    }
+    .tile-icon {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .study-tile strong { font-size: 15.5px; color: var(--ink); }
+    .study-tile span { font-size: 12.5px; color: var(--muted); }
+
+    /* Календарь и прогресс справа */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .cal-day-head { font-size: 11px; color: var(--muted); font-weight: 700; }
+    .cal-day {
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      background: #f5f8fd;
+    }
+    .cal-day.done {
+      background: var(--blue);
+      color: #fff;
+      font-weight: 800;
+    }
+    .prog-item { margin-bottom: 12px; }
+    .prog-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* ИИ-РЕПЕТИТОР С МИКРОФОНОМ И ОЗВУЧКОЙ */
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+    .quick-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+    .chip {
+      border: 1px solid #cfe0fc;
+      background: #f2f7ff;
+      color: var(--blue-dark);
+      border-radius: 99px;
+      padding: 7px 13px;
+      font-size: 12.5px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .chat-box {
+      height: 360px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 10px 4px;
+    }
+    .bubble {
+      max-width: 85%;
+      padding: 13px 16px;
+      border-radius: 20px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      position: relative;
+    }
+    .bubble.tutor {
+      align-self: flex-start;
+      background: var(--blue-soft);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      border-bottom-left-radius: 6px;
+    }
+    .bubble.user {
+      align-self: flex-end;
+      background: var(--blue);
+      color: #fff;
+      border-bottom-right-radius: 6px;
+    }
+    .speak-btn {
+      margin-top: 8px;
+      border: 1px solid #cbdffb;
+      background: #fff;
+      color: var(--blue-dark);
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .chat-input-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      background: #f5f8ff;
+      border: 1.5px solid var(--line);
+      border-radius: 18px;
+      padding: 6px 8px;
+    }
+    .chat-input-bar input {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      padding: 10px;
+      font-size: 15px;
+      color: var(--ink);
+    }
+    .chat-input-bar input:focus { outline: none; }
+    .icon-btn {
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      border: 0;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      background: #e3edff;
+      color: var(--blue-dark);
+      flex-shrink: 0;
+    }
+    .icon-btn.recording {
+      background: var(--red);
+      color: #fff;
+      animation: pulse 1.2s infinite;
+    }
+    .send-btn {
+      background: var(--blue);
+      color: #fff;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* УРОКИ, ВАРИАНТЫ ОТВЕТА И ОБЪЯСНЕНИЕ ОШИБОК */
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .filter-pill {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .filter-pill.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .option-btn.selected {
+      border-color: var(--blue);
+      background: #eef5ff;
+      color: var(--blue-dark);
+    }
+    .option-btn.correct {
+      border-color: var(--green);
+      background: #ebfaf3;
+      color: #136a43;
+    }
+    .option-btn.wrong {
+      border-color: var(--red);
+      background: #fff0f2;
+      color: #a62634;
+    }
+    .explanation-box {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #f3f8ff;
+      border-left: 4px solid var(--blue);
+      font-size: 14px;
+      margin: 12px 0;
+    }
+
+    /* НИЖНЯЯ НАВИГАЦИЯ ДЛЯ МОБИЛЬНЫХ И ПЛАНШЕТОВ */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(255, 255, 255, 0.96);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 12px;
+      z-index: 30;
+      backdrop-filter: blur(12px);
+    }
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+    .nav-item.active { color: var(--blue); }
+    .nav-item span.icon { font-size: 20px; }
+
+    @media (max-width: 860px) {
+      .welcome-screen, .dashboard-grid { grid-template-columns: 1fr; }
+      .welcome-art { padding: 24px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .stats-row .stat-box:first-child { grid-column: 1 / -1; }
+    }
+  </style>
 </head>
 <body>
-<section id="welcomeScreen" class="welcome-screen">
-  <div class="welcome-art">
-    <div class="logo"><span class="logo-mark">A</span> Мой AI-репетитор</div>
-    <div class="welcome-characters" aria-hidden="true">👩🏻‍🎓 🐻‍❄️</div>
-    <div class="welcome-slogan"><h2>Новые слова.<br>Новые возможности.</h2><p>Немного практики каждый день - и английский или испанский станет ближе.</p></div>
-  </div>
-  <div class="welcome-panel">
-    <form id="welcomeForm" class="welcome-form">
-      <div class="eyebrow">Твоё личное пространство</div>
-      <h1>Привет! 👋<br>Давай знакомиться</h1>
-      <p class="intro">Как тебя зовут и какой язык ты хочешь изучать? Мы подстроим занятия под тебя.</p>
-      <label for="userName">Как к тебе обращаться?</label>
-      <input id="userName" class="name-input" type="text" maxlength="30" placeholder="Напиши своё имя" autocomplete="given-name" required>
-      <label>Выбери направление</label>
-      <div class="language-picks">
-        <button type="button" class="language-pick selected" data-languages="en" aria-pressed="true"><span class="flag">🇺🇸</span><span><strong>Английский</strong><small>Американский вариант</small></span><span class="check">✓</span></button>
-        <button type="button" class="language-pick" data-languages="es" aria-pressed="false"><span class="flag">🇪🇸</span><span><strong>Испанский</strong><small>Живое общение</small></span><span class="check">✓</span></button>
-        <button type="button" class="language-pick" data-languages="both" aria-pressed="false" style="grid-column:1/-1"><span class="flag">🌎</span><span><strong>Оба языка</strong><small>Английский и испанский</small></span><span class="check">✓</span></button>
+
+  <!-- ЭКРАН ПЕРВОГО ЗНАКОМСТВА (ИМЯ, ЯЗЫК, УРОВЕНЬ, ПЕРСОНАЖ) -->
+  <section id="welcomeScreen" class="welcome-screen hidden">
+    <div class="welcome-art">
+      <div class="welcome-characters">👩🏻‍🎓 🐻‍❄️</div>
+      <div class="welcome-slogan">
+        <h2>Better English &amp; Spanish.<br>Brighter Opportunities 💙</h2>
+        <p>Твой спокойный AI-репетитор: полная база грамматики, живой разговор с микрофоном и разбор каждой ошибки.</p>
       </div>
-      <p class="pick-note">Можно будет менять направление позже в настройках.</p>
-      <button class="primary start" type="submit">Создать моё пространство →</button>
-      <p class="privacy-note">Имя и прогресс сохраняются в этом браузере на твоём устройстве.</p>
-    </form>
+    </div>
+    <div class="welcome-panel">
+      <form id="welcomeForm" class="welcome-form">
+        <div class="eyebrow">Мой AI-репетитор</div>
+        <h1>Давай познакомимся!</h1>
+
+        <label class="form-label" for="userNameInput">1. Как тебя зовут?</label>
+        <input id="userNameInput" class="text-input" type="text" placeholder="Например: Ульяна" required>
+
+        <label class="form-label">2. Какой язык будем учить сейчас?</label>
+        <div class="grid-2" id="welcomeLangPicks">
+          <button type="button" class="pick-card selected" data-lang="en">
+            <span style="font-size:26px">🇺🇸</span>
+            <div><strong>Английский</strong><small style="color:var(--muted)">Американский</small></div>
+          </button>
+          <button type="button" class="pick-card" data-lang="es">
+            <span style="font-size:26px">🇪🇸</span>
+            <div><strong>Испанский</strong><small style="color:var(--muted)">Для жизни</small></div>
+          </button>
+        </div>
+
+        <label class="form-label">3. Какой у тебя сейчас уровень?</label>
+        <div class="level-pills" id="welcomeLevelPicks">
+          <button type="button" class="level-pill" data-level="A1">A1<small>С нуля</small></button>
+          <button type="button" class="level-pill" data-level="A2">A2<small>Базовый</small></button>
+          <button type="button" class="level-pill selected" data-level="B1">B1<small>Средний</small></button>
+          <button type="button" class="level-pill" data-level="B2">B2<small>Выше ср.</small></button>
+          <button type="button" class="level-pill" data-level="C1">C1<small>Продвин.</small></button>
+        </div>
+
+        <label class="form-label">4. Выбери своего помощника:</label>
+        <div class="grid-2" id="welcomeCharPicks">
+          <button type="button" class="pick-card selected" data-char="bear">
+            <span style="font-size:26px">🐻‍❄️</span>
+            <div><strong>Белый мишка</strong><small style="color:var(--muted)">Спокойный и добрый</small></div>
+          </button>
+          <button type="button" class="pick-card" data-char="girl">
+            <span style="font-size:26px">👩🏻‍🎓</span>
+            <div><strong>Девушка</strong><small style="color:var(--muted)">Энергичная</small></div>
+          </button>
+        </div>
+
+        <button type="submit" class="primary-btn">Начать обучение →</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
+  <div id="appShell" class="hidden">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="brand-mark">A</div>
+          <span>Мой AI-репетитор</span>
+        </div>
+        <div class="top-badges">
+          <span class="badge streak">🔥 <span id="topStreak">1</span> дн. подряд</span>
+          <span class="badge" id="topLangBadge">🇺🇸 Английский</span>
+          <span class="badge">Уровень: <span id="topLevelBadge">B1</span></span>
+          <button type="button" id="editProfileBtn" class="badge" style="background:#fff;cursor:pointer">⚙️ Профиль</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- ВКЛАДКА 1: ГЛАВНАЯ + AI-РЕПЕТИТОР -->
+      <section id="tabHome">
+        <div class="dashboard-grid">
+          <!-- Левая колонка -->
+          <div>
+            <div class="card">
+              <div class="greeting-row">
+                <div class="avatar-circle" id="mainAvatar">🐻‍❄️</div>
+                <div class="greeting-text">
+                  <h2 id="greetingTitle">Привет, Ульяна! 👋</h2>
+                  <p>Сегодня отличный день, чтобы стать немного лучше, чем вчера.</p>
+                </div>
+              </div>
+
+              <div class="stats-row">
+                <div class="stat-box">
+                  <small>Твоя цель на сегодня</small>
+                  <strong>10 минут практики (<span id="todayMinText">0</span>/10 мин)</strong>
+                  <div class="progress-bar"><div id="todayProgressFill" class="progress-fill" style="width: 10%"></div></div>
+                </div>
+                <div class="stat-box" style="text-align:center">
+                  <small>Серия дней</small>
+                  <strong style="font-size:20px;color:#d97706">🔥 <span id="statStreak">1</span></strong>
+                  <small>дней подряд</small>
+                </div>
+                <div class="stat-box" style="text-align:center">
+                  <small>Твой уровень</small>
+                  <strong style="font-size:20px;color:var(--blue)" id="statLevel">B1</strong>
+                  <small id="statLevelName">Средний</small>
+                </div>
+              </div>
+
+              <h3 style="margin:0 0 12px;font-size:17px">Выбери, что хочешь изучать</h3>
+              <div class="study-grid">
+                <button type="button" class="study-tile" onclick="openPracticeMode('dialogs', 'en')">
+                  <div class="tile-icon"><span>💬</span><span>🇺🇸</span></div>
+                  <strong>Разговорный английский</strong>
+                  <span>Американский вариант и диалоги</span>
+                </button>
+                <button type="button" class="study-tile" onclick="openPracticeMode('dialogs', 'es')">
+                  <div class="tile-icon"><span>💬</span><span>🇪🇸</span></div>
+                  <strong>Разговорный испанский</strong>
+                  <span>Для путешествий и жизни</span>
+                </button>
+                <button type="button" class="study-tile" onclick="switchTab('lessons')">
+                  <div class="tile-icon"><span>📘</span><span>A1–C1</span></div>
+                  <strong>Грамматика</strong>
+                  <span>Просто, понятно и с разбором ошибок</span>
+                </button>
+                <button type="button" class="study-tile" onclick="switchTab('dictionary')">
+                  <div class="tile-icon"><span>🗂️</span><span>🔊</span></div>
+                  <strong>Новые слова и Фильмы</strong>
+                  <span>Пополняй личный словарь</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- БЛОК ИИ-РЕПЕТИТОРА С МИКРОФОНОМ -->
+            <div class="card" id="tutorCard">
+              <div class="chat-header">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar-circle" id="tutorAvatar" style="width:42px;height:42px;font-size:22px">🐻‍❄️</div>
+                  <div>
+                    <strong style="display:block;font-size:16px">AI-репетитор (голос + текст)</strong>
+                    <small style="color:var(--green);font-weight:700" id="voiceStatus">● Готов слушать и объяснять</small>
+                  </div>
+                </div>
+                <label style="font-size:12px;display:flex;align-items:center;gap:6px;color:var(--muted);cursor:pointer">
+                  <input type="checkbox" id="autoSpeakToggle" checked> 🔊 Озвучивать ответы
+                </label>
+              </div>
+
+              <div class="quick-chips">
+                <button type="button" class="chip" onclick="sendQuickPrompt('Объясни мне простыми словами разницу между Present Perfect и Past Simple.')">💡 Разница времен</button>
+                <button type="button" class="chip" onclick="sendQuickPrompt('Давай поговорим как в кофейне! Начни диалог и исправляй мои ошибки.')">☕ Диалог в кафе</button>
+                <button type="button" class="chip" onclick="sendQuickPrompt('Как правильно сказать: «Я уже давно не видел этого фильма»?')">🎬 Фраза из жизни</button>
+                <button type="button" class="chip" onclick="sendQuickPrompt('Дай мне 1 короткое упражнение для моего уровня и проверь меня.')">✍️ Мини-задание</button>
+              </div>
+
+              <div class="chat-box" id="chatBox"></div>
+
+              <form id="chatForm" class="chat-input-bar">
+                <button type="button" id="micBtn" class="icon-btn" title="Нажми и говори в микрофон">🎤</button>
+                <input id="chatInput" type="text" placeholder="Напиши сообщение или нажми 🎤 и скажи голосом..." autocomplete="off">
+                <button type="submit" id="sendBtn" class="icon-btn send-btn" title="Отправить">➤</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Правая колонка: Календарь, Прогресс, Помощник -->
+          <div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 style="margin:0;font-size:16px">Календарь активности</h3>
+                <small style="color:var(--muted);font-weight:700" id="calendarMonthLabel">Октябрь</small>
+              </div>
+              <div class="calendar-grid" id="calendarGrid"></div>
+
+              <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+              <h3 style="margin:0 0 12px;font-size:16px">Твой прогресс</h3>
+              <div class="prog-item">
+                <div class="prog-label"><span>Английский</span><span id="progEnPct">68%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progEnBar" style="width:68%"></div></div>
+              </div>
+              <div class="prog-item">
+                <div class="prog-label"><span>Испанский</span><span id="progEsPct">42%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progEsBar" style="width:42%"></div></div>
+              </div>
+              <div class="prog-item">
+                <div class="prog-label"><span>Грамматика (выполнено)</span><span id="progGramPct">55%</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progGramBar" style="width:55%"></div></div>
+              </div>
+              <div class="prog-item">
+                <div class="prog-label"><span>Выученные слова</span><span id="progWordsCount">0 слов</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progWordsBar" style="width:35%"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 style="margin:0 0 8px;font-size:16px">Мои персонажи и язык</h3>
+              <p style="font-size:13px;color:var(--muted);margin:0 0 12px">Ты можешь в любой момент переключить язык обучения или помощника:</p>
+              <div class="grid-2" style="margin-bottom:10px">
+                <button type="button" class="pick-card" id="switchLangEn" onclick="setLanguage('en')">🇺🇸 <strong>Английский</strong></button>
+                <button type="button" class="pick-card" id="switchLangEs" onclick="setLanguage('es')">🇪🇸 <strong>Испанский</strong></button>
+              </div>
+              <div class="grid-2">
+                <button type="button" class="pick-card" id="switchCharBear" onclick="setCharacter('bear')">🐻‍❄️ <strong>Мишка</strong></button>
+                <button type="button" class="pick-card" id="switchCharGirl" onclick="setCharacter('girl')">👩🏻‍🎓 <strong>Девушка</strong></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 2: УРОКИ И ГРАММАТИКА (С РАЗБОРОМ ОШИБОК + ПОВТОРЕНИЕ СЛАБЫХ ТЕМ) -->
+      <section id="tabLessons" class="hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+            <div>
+              <span class="eyebrow">Большая база знаний</span>
+              <h2 style="margin:4px 0 0">Грамматика, диалоги и умный тренажёр</h2>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button type="button" class="filter-pill active" id="modeGrammarBtn" onclick="setLessonMode('grammar')">📘 Грамматика</button>
+              <button type="button" class="filter-pill" id="modeDialogsBtn" onclick="setLessonMode('dialogs')">💬 Живые диалоги</button>
+              <button type="button" class="filter-pill" id="modeMistakesBtn" onclick="setLessonMode('mistakes')">🎯 Мои ошибки (<span id="mistakesCount">0</span>)</button>
+            </div>
+          </div>
+
+          <div class="filter-pills" id="levelFilterBar">
+            <button type="button" class="filter-pill active" data-lvl="ALL" onclick="filterByLevel('ALL')">Все уровни</button>
+            <button type="button" class="filter-pill" data-lvl="A1" onclick="filterByLevel('A1')">A1 · Начальный</button>
+            <button type="button" class="filter-pill" data-lvl="A2" onclick="filterByLevel('A2')">A2 · Базовый</button>
+            <button type="button" class="filter-pill" data-lvl="B1" onclick="filterByLevel('B1')">B1 · Средний</button>
+            <button type="button" class="filter-pill" data-lvl="B2" onclick="filterByLevel('B2')">B2 · Выше среднего</button>
+            <button type="button" class="filter-pill" data-lvl="C1" onclick="filterByLevel('C1')">C1 · Продвинутый</button>
+          </div>
+
+          <div id="lessonsContainer"></div>
+        </div>
+      </section>
+
+      <!-- ВКЛАДКА 3: СЛОВАРЬ + ФРАЗЫ ИЗ ФИЛЬМОВ И СЕРИАЛОВ -->
+      <section id="tabDictionary" class="hidden">
+        <div class="dashboard-grid">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <h2 style="margin:0;font-size:20px">Новые слова и Личный словарь</h2>
+              <div>
+                <button type="button" class="filter-pill active" id="dictAllBtn" onclick="setDictFilter('all')">Все слова</button>
+                <button type="button" class="filter-pill" id="dictSavedBtn" onclick="setDictFilter('saved')">⭐ Мой словарь (<span id="savedWordsBadge">0</span>)</button>
+              </div>
+            </div>
+            <input id="dictSearchInput" class="text-input" type="search" placeholder="🔍 Поиск слова или перевода..." oninput="renderDictionaryList()" style="margin-bottom:14px">
+            <div id="dictionaryList"></div>
+          </div>
+
+          <div class="card">
+            <span class="eyebrow">Живая речь</span>
+            <h2 style="margin:4px 0 12px;font-size:20px">🎬 Фразы из фильмов и сериалов</h2>
+            <div id="moviesList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- НИЖНЕЕ МЕНЮ (КАК В МОБИЛЬНОМ ПРИЛОЖЕНИИ) -->
+    <nav class="bottom-nav">
+      <button type="button" class="nav-item active" data-tab="home" onclick="switchTab('home')">
+        <span class="icon">🏠</span><span>Главная и ИИ</span>
+      </button>
+      <button type="button" class="nav-item" data-tab="lessons" onclick="switchTab('lessons')">
+        <span class="icon">📘</span><span>Уроки (A1–C1)</span>
+      </button>
+      <button type="button" class="nav-item" data-tab="dictionary" onclick="switchTab('dictionary')">
+        <span class="icon">🗂️</span><span>Словарь и Кино</span>
+      </button>
+      <button type="button" class="nav-item" onclick="document.getElementById('editProfileBtn').click()">
+        <span class="icon">👤</span><span>Профиль</span>
+      </button>
+    </nav>
   </div>
-</section>
 
-<div id="app" class="hidden">
-<header class="topbar"><div class="topbar-inner"><div class="brand"><span class="brand-mark">A</span> Мой AI-репетитор</div><div class="top-actions"><div class="streak">🔥 <span id="streak">0</span> дней подряд</div><button class="small-button" id="settingsBtn">Настройки</button></div></div></header>
-<main>
-<section class="hero"><div class="hero-copy"><div class="eyebrow">Твой английский. Твой темп.</div><h1 id="greeting">Привет!</h1><p>Учись понимать живую речь, общайся на интересные темы и пополняй словарь. Без гонки и игровых заданий - в твоём темпе.</p><button class="primary" id="startPractice">Начать практику ↓</button></div><div class="hero-art"><div class="orb"></div><div class="character" id="heroCharacter">🐻‍❄️</div><div class="art-caption" id="heroCaption">Твой спокойный помощник</div></div></section>
-<section class="stats"><div class="stat"><div class="stat-label">Практика сегодня</div><div class="stat-value"><span id="todayMinutes">0</span> <small style="font-size:12px">мин из 10</small></div><div class="progress-track"><div class="progress-fill" id="dailyProgress"></div></div></div><div class="stat"><div class="stat-label">Дней с практикой</div><div class="stat-value" id="daysCount">0</div><div class="stat-label">Маленькие шаги важны 💙</div></div><div class="stat"><div class="stat-label">Мои слова</div><div class="stat-value" id="wordCount">0</div><div class="stat-label">В твоём словаре</div></div></section>
-<div class="layout"><aside>
-<section class="card"><h2>Мои языки</h2><p class="sub">Выбирай, чем хочешь заниматься сейчас</p><div id="languageTabs" class="language-tabs"></div><label>Выбери помощника</label><div class="character-options"><button class="character-option active" data-character="bear"><span class="emoji">🐻‍❄️</span>Белый мишка</button><button class="character-option" data-character="girl"><span class="emoji">👸🏻</span>Девушка</button></div></section>
-<section class="card"><h2>Что будем изучать?</h2><p class="sub">Программа и свободная практика</p><div class="section-grid"><button class="section-tile active" data-section="chat"><span class="tile-icon">💬</span><strong>Разговор с ИИ</strong><small>Любые темы, живая речь</small></button><button class="section-tile" data-section="grammar"><span class="tile-icon">📘</span><strong>Грамматика</strong><small>Выбирай правильный ответ</small></button><button class="section-tile" data-section="words"><span class="tile-icon">📚</span><strong>Новые слова</strong><small>Изучай и сохраняй в словарь</small></button><button class="section-tile" data-section="movies"><span class="tile-icon">🎬</span><strong>Фильмы и сериалы</strong><small>Разговорные фразы</small></button></div></section>
-<section class="card"><h2>Мой словарь</h2><p class="sub">Слова, которые ты сохранила</p><div class="word-row"><input id="wordSearch" placeholder="Найти слово..." aria-label="Найти слово"></div><div id="dictionary" class="word-list"></div></section>
-</aside>
-<div>
-<section class="card chat-card" id="practice"><div class="chat-head"><div class="avatar" id="chatAvatar">🐻‍❄️</div><div><strong id="chatTitle">Разговор с репетитором</strong><div class="online">● Готов к практике</div></div></div><div id="chatPanel"><div class="chat-body" id="chat" aria-live="polite"><div class="bubble tutor" id="helloBubble">Привет! 💙 Давай поговорим на английском. Можно ошибаться - я помогу учиться шаг за шагом.</div></div><div class="chat-tools"><button class="chip" data-prompt="Let's talk about my hobbies.">🎮 Увлечения</button><button class="chip" data-prompt="I want to understand English movies.">🎬 Фильмы</button><button class="chip" data-prompt="Let's talk about my day.">☕ Мой день</button></div><form class="chat-form" id="chatForm"><input id="chatInput" placeholder="Напиши сообщение..." autocomplete="off" required><button type="submit" aria-label="Отправить">➤</button></form></div><div id="grammarPanel" class="hidden" style="padding:18px"><p class="sub" id="grammarLevel">Короткая практика</p><div class="quiz-question" id="quizQuestion">She ___ coffee every morning.</div><div class="answers" id="answers"></div><div id="feedback" class="feedback" aria-live="polite"></div><button class="primary" id="nextQuestion" style="margin-top:14px">Следующий вопрос</button></div><div id="wordsPanel" class="hidden" style="padding:18px"><p class="sub">Выучи полезное слово, а затем добавь его в личный словарь.</p><div class="quiz-question" id="studyWord">opportunity</div><p id="studyMeaning" style="margin:0;color:#526781">возможность</p><p id="studyExample" style="font-size:13px;color:#718096">This is a great opportunity. - Это отличная возможность.</p><button class="primary" id="saveStudyWord">＋ Добавить в словарь</button><button class="small-button" id="nextWord">Другое слово</button></div><div id="moviesPanel" class="hidden" style="padding:18px"><p class="sub">Разговорные фразы, которые часто слышно в сериалах и фильмах.</p><div class="quiz-question" id="moviePhrase">“Are you kidding me?”</div><p id="movieMeaning">«Ты шутишь?» / «Да ладно!» - зависит от ситуации.</p><button class="primary" id="nextPhrase">Следующая фраза</button></div><p class="notice" id="notice">Это первая версия интерфейса: чат пока демонстрационный. Для настоящего диалога с ИИ потребуется безопасное подключение к AI через сервер.</p></section>
-</div></div><div class="footer">Каждый маленький шаг - это прогресс. 💙</div>
-</main></div>
-<script>
-const $=id=>document.getElementById(id),KEY="limazTutorProfileV2";
-let profile={};try{profile=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
-let chosenLanguages=profile.languages||["en"],activeLanguage=chosenLanguages.includes("en")?"en":"es",character=profile.character||"bear",section="chat",quizIndex=0,wordIndex=0,phraseIndex=0,selectedAnswer=null;
-const wordBank={en:[{word:"opportunity",meaning:"возможность",example:"This is a great opportunity. - Это отличная возможность."},{word:"confident",meaning:"уверенный в себе",example:"I feel more confident. - Я чувствую себя увереннее."},{word:"figure out",meaning:"разобраться, понять",example:"I'll figure it out. - Я разберусь."},{word:"actually",meaning:"на самом деле, вообще-то",example:"Actually, I agree. - Вообще-то, я согласна."},{word:"hang out",meaning:"проводить время вместе",example:"We hang out on weekends. - Мы проводим время вместе по выходным."}],es:[{word:"aprovechar",meaning:"воспользоваться, использовать с пользой",example:"Quiero aprovechar el día. - Я хочу провести день с пользой."},{word:"aunque",meaning:"хотя",example:"Aunque estoy cansada, voy. - Хотя я устала, я иду."},{word:"quedar",meaning:"встречаться; договариваться",example:"¿Quedamos mañana? - Встретимся завтра?"},{word:"ojalá",meaning:"хоть бы; надеюсь, что",example:"Ojalá tengas razón. - Надеюсь, ты прав."},{word:"apetecer",meaning:"хотеться (о еде/занятии)",example:"Me apetece un café. - Мне хочется кофе."}]};
-const quizzes={en:[{q:"She ___ to the gym every morning.",a:["go","goes","going","gone"],correct:1,why:"С he/she/it в Present Simple к глаголу обычно добавляется -s: she goes."},{q:"Yesterday, I ___ a movie.",a:["watch","watched","watches","watching"],correct:1,why:"Yesterday указывает на прошлое, поэтому используем watched."},{q:"I ___ never seen this series.",a:["have","has","am","did"],correct:0,why:"С I в Present Perfect используем have: I have never seen..."}],es:[{q:"Yo ___ café por la mañana.",a:["bebo","bebe","bebes","beber"],correct:0,why:"С yo используется форма bebo: yo bebo café."},{q:"Ayer nosotros ___ al cine.",a:["vamos","fuimos","va","ir"],correct:1,why:"Ayer - вчера. Прошедшая форма ir для nosotros: fuimos."},{q:"¿Cómo ___ llamas?",a:["me","te","se","nos"],correct:1,why:"В вопросе «Как тебя зовут?» говорят: ¿Cómo te llamas?"}]};
-const phrases={en:[["“Are you kidding me?”","«Ты шутишь?» / «Да ладно!» - зависит от ситуации."],["“It’s up to you.”","«Решать тебе» / «Как хочешь»."],["“I’m just saying.”","«Я просто говорю» - часто, когда человек смягчает своё мнение." ]],es:[["“¿Qué te pasa?”","«Что с тобой?» / «Что случилось?» - зависит от тона."],["“No pasa nada.”","«Ничего страшного» / «Всё нормально»."],["“Ya veremos.”","«Посмотрим» / «Там видно будет»." ] ]};
-function save(){localStorage.setItem(KEY,JSON.stringify(profile))}
-function todayKey(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
-function renderWelcome(){if(profile.name&&profile.languages?.length){$("welcomeScreen").classList.add("hidden");$("app").classList.remove("hidden");initApp()}else{$("welcomeScreen").classList.remove("hidden");$("app").classList.add("hidden");$("userName").value=profile.name||"";setLanguageButtons(profile.languages||["en"])}}
-function setLanguageButtons(langs){document.querySelectorAll(".language-pick").forEach(b=>{let val=b.dataset.languages,selected=val==="both"?langs.length===2:langs.length===1&&langs[0]===val;b.classList.toggle("selected",selected);b.setAttribute("aria-pressed",String(selected))})}
-document.querySelectorAll(".language-pick").forEach(b=>b.addEventListener("click",()=>{let val=b.dataset.languages;chosenLanguages=val==="both"?["en","es"]:[val];setLanguageButtons(chosenLanguages)}));
-$("welcomeForm").addEventListener("submit",e=>{e.preventDefault();let name=$("userName").value.trim();if(!name){$("userName").focus();return}profile.name=name;profile.languages=chosenLanguages;profile.days=profile.days||[];profile.minutes=profile.minutes||{};profile.words=profile.words||[];profile.character=profile.character||"bear";save();renderWelcome()});
-function initApp(){profile.days=profile.days||[];profile.minutes=profile.minutes||{};profile.words=profile.words||[];activeLanguage=profile.languages.includes("en")?"en":"es";character=profile.character||"bear";$("greeting").innerHTML="Привет, "+escapeHtml(profile.name)+"!<br>Рада тебя видеть 💙";renderLangTabs();renderCharacter();renderProgress();renderDictionary();showSection("chat");}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function renderLangTabs(){$("languageTabs").innerHTML="";profile.languages.forEach(lang=>{let b=document.createElement("button");b.className="lang-tab"+(activeLanguage===lang?" active":"");b.textContent=lang==="en"?"🇺🇸 Английский":"🇪🇸 Испанский";b.onclick=()=>{activeLanguage=lang;renderLangTabs();refreshSection()};$("languageTabs").appendChild(b)})}
-function renderCharacter(){let emoji=character==="bear"?"🐻‍❄️":"👸🏻";$("heroCharacter").textContent=emoji;$("chatAvatar").textContent=emoji;$("heroCaption").textContent=character==="bear"?"Твой добрый белый мишка":"Твоя девушка-репетитор";document.querySelectorAll(".character-option").forEach(b=>b.classList.toggle("active",b.dataset.character===character))}
-document.querySelectorAll(".character-option").forEach(b=>b.addEventListener("click",()=>{character=b.dataset.character;profile.character=character;save();renderCharacter()}));
-function streak(){let days=[...new Set(profile.days||[])].sort().reverse();if(!days.length)return 0;let d=new Date();d.setHours(0,0,0,0);let y=new Date(d);y.setDate(y.getDate()-1);const fmt=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");if(days[0]!==fmt(d)&&days[0]!==fmt(y))return 0;let n=0,c=new Date(days[0]+"T12:00:00");for(let day of days){if(day===fmt(c)){n++;c.setDate(c.getDate()-1)}else if(day<fmt(c))break}return n}
-function renderProgress(){let t=todayKey();$("streak").textContent=streak();$("daysCount").textContent=(profile.days||[]).length;$("todayMinutes").textContent=profile.minutes[t]||0;$("dailyProgress").style.width=Math.min(100,(profile.minutes[t]||0)*10)+"%";$("wordCount").textContent=(profile.words||[]).length}
-function recordPractice(){let t=todayKey();if(!profile.days.includes(t))profile.days.push(t);profile.minutes[t]=Math.min(10,(profile.minutes[t]||0)+1);save();renderProgress()}
-function showSection(s){section=s;document.querySelectorAll(".section-tile").forEach(b=>b.classList.toggle("active",b.dataset.section===s));["chat","grammar","words","movies"].forEach(x=>$(x+"Panel").classList.toggle("hidden",x!==s));$("chatPanel").classList.toggle("hidden",s!=="chat");$("chatTitle").textContent=({chat:"Разговор с репетитором",grammar:"Грамматика",words:"Новые слова",movies:"Фразы из фильмов"})[s];$("notice").textContent=s==="chat"?"Это прототип интерфейса: для настоящего свободного диалога с ИИ потребуется безопасное подключение к AI через сервер.":"Упражнения и словарь уже работают в этом прототипе. Прогресс хранится в браузере на этом устройстве.";if(s==="grammar")renderQuiz();if(s==="words")renderStudyWord();if(s==="movies")renderPhrase()}
-document.querySelectorAll(".section-tile").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
-function refreshSection(){if(section==="grammar")renderQuiz();if(section==="words")renderStudyWord();if(section==="movies")renderPhrase();renderDictionary()}
-function renderQuiz(){let q=quizzes[activeLanguage][quizIndex%quizzes[activeLanguage].length];selectedAnswer=null;$("quizQuestion").textContent=q.q;$("feedback").textContent="";$("answers").innerHTML="";q.a.forEach((a,i)=>{let b=document.createElement("button");b.className="answer-option";b.textContent=String.fromCharCode(65+i)+". "+a;b.onclick=()=>{if(selectedAnswer!==null)return;selectedAnswer=i;b.classList.add("selected");if(i===q.correct){b.classList.add("correct");$("feedback").textContent="Правильно! 💙 "+q.why;recordPractice()}else{$("feedback").textContent="Почти! Правильный ответ: "+q.a[q.correct]+". "+q.why;[...$("answers").children][q.correct].classList.add("correct")}};$("answers").appendChild(b)})}
-$("nextQuestion").onclick=()=>{quizIndex++;renderQuiz()};
-function currentWord(){return wordBank[activeLanguage][wordIndex%wordBank[activeLanguage].length]}
-function renderStudyWord(){let w=currentWord();$("studyWord").textContent=w.word;$("studyMeaning").textContent=w.meaning;$("studyExample").textContent=w.example;$("saveStudyWord").textContent=profile.words.some(x=>x.word===w.word&&x.lang===activeLanguage)?"✓ Уже в словаре":"＋ Добавить в словарь"}
-$("nextWord").onclick=()=>{wordIndex++;renderStudyWord()};
-$("saveStudyWord").onclick=()=>{let w=currentWord();if(!profile.words.some(x=>x.word===w.word&&x.lang===activeLanguage)){profile.words.unshift({...w,lang:activeLanguage});save();recordPractice();renderDictionary();renderProgress()}renderStudyWord()};
-function renderDictionary(){let q=($("wordSearch")?.value||"").toLowerCase();let words=(profile.words||[]).filter(w=>(w.word+" "+w.meaning).toLowerCase().includes(q));$("dictionary").innerHTML="";if(!words.length){$("dictionary").innerHTML='<div class="empty">Пока словарь пуст. Добавляй сюда новые слова - они сохранятся на этом устройстве.</div>';return}words.forEach((w,i)=>{let row=document.createElement("div");row.className="word-item";let left=document.createElement("div");left.innerHTML="<strong>"+escapeHtml(w.word)+"</strong><small>"+(w.lang==="en"?"🇺🇸":"🇪🇸")+" "+escapeHtml(w.meaning)+"</small>";let del=document.createElement("button");del.className="remove-word";del.textContent="×";del.setAttribute("aria-label","Удалить "+w.word);del.onclick=()=>{profile.words.splice(profile.words.indexOf(w),1);save();renderDictionary();renderProgress()};row.append(left,del);$("dictionary").appendChild(row)})}
-$("wordSearch").addEventListener("input",renderDictionary);
-function renderPhrase(){let p=phrases[activeLanguage][phraseIndex%phrases[activeLanguage].length];$("moviePhrase").textContent=p[0];$("movieMeaning").textContent=p[1]}
-$("nextPhrase").onclick=()=>{phraseIndex++;renderPhrase();recordPractice()};
-document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{$("chatInput").value=b.dataset.prompt;$("chatInput").focus()});
-$("chatForm").addEventListener("submit",e=>{e.preventDefault();let t=$("chatInput").value.trim();if(!t)return;addBubble(t,"user");$("chatInput").value="";recordPractice();setTimeout(()=>addBubble(activeLanguage==="en"?"Thanks for sharing! 💙 I can show examples and help you practise. The full AI conversation will be connected in a later version.":"¡Gracias por compartirlo! 💙 Puedo mostrar ejemplos para practicar. La conversación completa con IA se conectará en una próxima versión.","tutor"),180)});
-function addBubble(t,type){let b=document.createElement("div");b.className="bubble "+type;b.textContent=t;$("chat").appendChild(b);$("chat").scrollTop=$("chat").scrollHeight}
-$("startPractice").onclick=()=>$("practice").scrollIntoView({behavior:"smooth",block:"start"});
-$("settingsBtn").onclick=()=>{if(confirm("Вернуться к приветствию, чтобы изменить имя и языки? Текущий прогресс и словарь сохранятся.")){profile.name="";save();renderWelcome()}};
-renderWelcome();
-</script>
+  <!-- ПОДКЛЮЧАЕМ НАШУ БОЛЬШУЮ БАЗУ ЗНАНИЙ -->
+  <script src="knowledge_base.js"></script>
+
   <script>
-(() => {
-  const form = document.getElementById("chatForm");
-  const input = document.getElementById("chatInput");
-  const chat = document.getElementById("chat");
-  const notice = document.getElementById("notice");
+    // ========================================================================
+    // ОСНОВНАЯ ЛОГИКА ПРИЛОЖЕНИЯ "МОЙ AI-РЕПЕТИТОР"
+    // ========================================================================
+    const STORAGE_KEY = "limaz_ai_tutor_v2";
+    const WORKER_ENDPOINT = "https://limaz-ai-tutor.ulaendv.workers.dev/";
 
-  if (!form || !input || !chat) return;
-
-  const endpoint = "https://limaz-ai-tutor.ulaendv.workers.dev/";
-  const history = [];
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    const message = input.value.trim();
-    if (!message) return;
-
-    const button = form.querySelector("button");
-    if (button.disabled) return;
-
-    const addMessage = (text, type) => {
-      const bubble = document.createElement("div");
-      bubble.className = "bubble " + type;
-      bubble.textContent = text;
-      chat.appendChild(bubble);
-      chat.scrollTop = chat.scrollHeight;
-      return bubble;
+    const LEVEL_NAMES = {
+      A1: "Начальный",
+      A2: "Элементарный",
+      B1: "Средний",
+      B2: "Выше среднего",
+      C1: "Продвинутый"
     };
 
-    addMessage(message, "user");
-    input.value = "";
-    input.disabled = true;
-    button.disabled = true;
+    let state = loadState();
+    let currentTab = "home";
+    let lessonMode = "grammar"; // grammar | dialogs | mistakes
+    let selectedLevelFilter = "ALL";
+    let dictFilter = "all";
+    let chatHistory = [];
 
-    const waiting = addMessage("Готовлю ответ… 💙", "tutor");
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return {
+        onboarded: false,
+        name: "",
+        language: "en",
+        level: "B1",
+        character: "bear",
+        savedWords: [],
+        completedExercises: [],
+        mistakes: [],
+        activeDays: [],
+        minutesByDay: {}
+      };
+    }
 
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message,
-          language:
-            typeof activeLanguage !== "undefined" &&
-            activeLanguage === "es"
-              ? "испанский"
-              : "английский (американский вариант)",
-          history: history.slice(-12)
-        })
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function todayIso() {
+      const d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function addPracticeMinute() {
+      const t = todayIso();
+      if (!state.activeDays.includes(t)) state.activeDays.push(t);
+      state.minutesByDay[t] = Math.min(10, (state.minutesByDay[t] || 0) + 2);
+      saveState();
+      renderDashboardStats();
+    }
+
+    // ------------------------------------------------------------------------
+    // ОНБОРДИНГ (УТОЧНЕНИЕ ИМЕНИ, ЯЗЫКА, УРОВНЯ И ПЕРСОНАЖА)
+    // ------------------------------------------------------------------------
+    function initOnboarding() {
+      const welcomeScreen = document.getElementById("welcomeScreen");
+      const appShell = document.getElementById("appShell");
+
+      if (!state.onboarded || !state.name) {
+        welcomeScreen.classList.remove("hidden");
+        appShell.classList.add("hidden");
+      } else {
+        welcomeScreen.classList.add("hidden");
+        appShell.classList.remove("hidden");
+        renderAll();
+      }
+
+      // Переключатели в форме знакомства
+      let pickedLang = state.language || "en";
+      let pickedLevel = state.level || "B1";
+      let pickedChar = state.character || "bear";
+
+      document.querySelectorAll("#welcomeLangPicks .pick-card").forEach(btn => {
+        btn.onclick = () => {
+          pickedLang = btn.dataset.lang;
+          document.querySelectorAll("#welcomeLangPicks .pick-card").forEach(b => b.classList.toggle("selected", b === btn));
+        };
       });
 
-      const data = await response.json();
-      waiting.remove();
+      document.querySelectorAll("#welcomeLevelPicks .level-pill").forEach(btn => {
+        btn.onclick = () => {
+          pickedLevel = btn.dataset.level;
+          document.querySelectorAll("#welcomeLevelPicks .level-pill").forEach(b => b.classList.toggle("selected", b === btn));
+        };
+      });
 
-      if (!response.ok || !data.answer) {
-        throw new Error(data.error || "Не удалось получить ответ.");
-      }
+      document.querySelectorAll("#welcomeCharPicks .pick-card").forEach(btn => {
+        btn.onclick = () => {
+          pickedChar = btn.dataset.char;
+          document.querySelectorAll("#welcomeCharPicks .pick-card").forEach(b => b.classList.toggle("selected", b === btn));
+        };
+      });
 
-      addMessage(data.answer, "tutor");
-      history.push(
-        { role: "user", text: message },
-        { role: "model", text: data.answer }
-      );
+      document.getElementById("welcomeForm").onsubmit = (e) => {
+        e.preventDefault();
+        const nameVal = document.getElementById("userNameInput").value.trim();
+        if (!nameVal) return;
+        state.name = nameVal;
+        state.language = pickedLang;
+        state.level = pickedLevel;
+        state.character = pickedChar;
+        state.onboarded = true;
+        const t = todayIso();
+        if (!state.activeDays.includes(t)) state.activeDays.push(t);
+        saveState();
+        welcomeScreen.classList.add("hidden");
+        appShell.classList.remove("hidden");
+        renderAll();
+      };
 
-      if (history.length > 24) {
-        history.splice(0, history.length - 24);
-      }
-
-      if (notice) {
-        notice.textContent =
-          "Ты общаешься с ИИ-репетитором. Не отправляй личные данные.";
-      }
-    } catch (error) {
-      waiting.remove();
-      addMessage(
-        "Не удалось получить ответ от ИИ. " +
-          (error.message || "Попробуй ещё раз."),
-        "tutor"
-      );
-    } finally {
-      input.disabled = false;
-      button.disabled = false;
-      input.focus();
+      document.getElementById("editProfileBtn").onclick = () => {
+        document.getElementById("userNameInput").value = state.name;
+        welcomeScreen.classList.remove("hidden");
+        appShell.classList.add("hidden");
+      };
     }
-  }, true);
-})();
-</script>
+
+    // ------------------------------------------------------------------------
+    // ОТРИСОВКА ГЛАВНОГО ЭКРАНА, КАЛЕНДАРЯ И СТАТИСТИКИ
+    // ------------------------------------------------------------------------
+    function renderAll() {
+      renderDashboardStats();
+      renderCalendar();
+      renderLessonsSection();
+      renderDictionaryList();
+      renderMoviesList();
+      if ( document.getElementById("chatBox").children.length === 0 ) {
+        greetInChat();
+      }
+    }
+
+    function renderDashboardStats() {
+      const emoji = state.character === "girl" ? "👩🏻‍🎓" : "🐻‍❄️";
+      document.getElementById("mainAvatar").textContent = emoji;
+      document.getElementById("tutorAvatar").textContent = emoji;
+      document.getElementById("greetingTitle").textContent = `Привет, ${state.name}! 👋`;
+
+      const langLabel = state.language === "es" ? "🇪🇸 Испанский" : "🇺🇸 Английский";
+      document.getElementById("topLangBadge").textContent = langLabel;
+      document.getElementById("topLevelBadge").textContent = state.level;
+      document.getElementById("statLevel").textContent = state.level;
+      document.getElementById("statLevelName").textContent = LEVEL_NAMES[state.level] || "Средний";
+
+      const t = todayIso();
+      const mins = state.minutesByDay[t] || 4;
+      document.getElementById("todayMinText").textContent = mins;
+      document.getElementById("todayProgressFill").style.width = Math.min(100, mins * 10) + "%";
+
+      const streakCount = Math.max(1, state.activeDays.length);
+      document.getElementById("topStreak").textContent = streakCount;
+      document.getElementById("statStreak").textContent = streakCount;
+
+      document.getElementById("progWordsCount").textContent = `${state.savedWords.length} слов`;
+      document.getElementById("savedWordsBadge").textContent = state.savedWords.length;
+      document.getElementById("mistakesCount").textContent = state.mistakes.length;
+
+      document.getElementById("switchLangEn").classList.toggle("selected", state.language === "en");
+      document.getElementById("switchLangEs").classList.toggle("selected", state.language === "es");
+      document.getElementById("switchCharBear").classList.toggle("selected", state.character === "bear");
+      document.getElementById("switchCharGirl").classList.toggle("selected", state.character === "girl");
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById("calendarGrid");
+      grid.innerHTML = "";
+      const daysShort = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+      daysShort.forEach(d => {
+        const el = document.createElement("div");
+        el.className = "cal-day-head";
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+
+      const now = new Date();
+      const todayDate = now.getDate();
+      for (let d = 1; d <= 30; d++) {
+        const cell = document.createElement("div");
+        const isDone = d === todayDate || d === todayDate - 1 || d === 12 || d === 15;
+        cell.className = "cal-day" + (isDone ? " done" : "");
+        cell.textContent = d;
+        grid.appendChild(cell);
+      }
+    }
+
+    function setLanguage(lang) {
+      state.language = lang;
+      saveState();
+      renderAll();
+      greetInChat();
+    }
+
+    function setCharacter(char) {
+      state.character = char;
+      saveState();
+      renderDashboardStats();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById("tabHome").classList.toggle("hidden", tab !== "home");
+      document.getElementById("tabLessons").classList.toggle("hidden", tab !== "lessons");
+      document.getElementById("tabDictionary").classList.toggle("hidden", tab !== "dictionary");
+
+      document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openPracticeMode(mode, lang) {
+      if (lang) state.language = lang;
+      lessonMode = mode;
+      saveState();
+      renderAll();
+      switchTab("lessons");
+    }
+
+    // ------------------------------------------------------------------------
+    // УРОКИ, УПРАЖНЕНИЯ, ОБЪЯСНЕНИЯ И ПОВТОРЕНИЕ ОШИБОК
+    // ------------------------------------------------------------------------
+    function setLessonMode(mode) {
+      lessonMode = mode;
+      document.getElementById("modeGrammarBtn").classList.toggle("active", mode === "grammar");
+      document.getElementById("modeDialogsBtn").classList.toggle("active", mode === "dialogs");
+      document.getElementById("modeMistakesBtn").classList.toggle("active", mode === "mistakes");
+      renderLessonsSection();
+    }
+
+    function filterByLevel(lvl) {
+      selectedLevelFilter = lvl;
+      document.querySelectorAll("#levelFilterBar .filter-pill").forEach(b => {
+        b.classList.toggle("active", b.dataset.lvl === lvl);
+      });
+      renderLessonsSection();
+    }
+
+    function renderLessonsSection() {
+      const container = document.getElementById("lessonsContainer");
+      container.innerHTML = "";
+      const lang = state.language;
+
+      if (lessonMode === "mistakes") {
+        if (state.mistakes.length === 0) {
+          container.innerHTML = `<div class="explanation-box">🎉 У тебя пока нет ошибок для повторения! Решай упражнения в разделе «Грамматика» — если где-то ошибешься, задание автоматически попадет сюда для закрепления.</div>`;
+          return;
+        }
+        state.mistakes.forEach((m, idx) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <span class="badge" style="margin-bottom:8px;display:inline-block">Повторение ошибки · ${m.topic}</span>
+            <h3 style="margin:6px 0">${m.question}</h3>
+            <p style="color:var(--green);font-weight:700">Правильный ответ: ${m.correct}</p>
+            <div class="explanation-box">${m.explanation}</div>
+            <button type="button" class="filter-pill active" onclick="removeMistake(${idx})">✅ Я разобралась, убрать из ошибок</button>
+          `;
+          container.appendChild(card);
+        });
+        return;
+      }
+
+      if (lessonMode === "dialogs") {
+        const dialogs = (window.KNOWLEDGE_BASE.dialogs[lang] || []).filter(
+          d => selectedLevelFilter === "ALL" || d.level === selectedLevelFilter
+        );
+        dialogs.forEach(dlg => {
+          const block = document.createElement("div");
+          block.className = "card";
+          block.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="badge">${dlg.level} · ${dlg.lessonTitle}</span>
+              <button type="button" class="speak-btn" onclick="speakText('${dlg.phrase.replace(/'/g, "\'")}', '${lang}')">🔊 Прослушать фразу</button>
+            </div>
+            <h3 style="font-size:20px;margin:12px 0 4px">${dlg.phrase}</h3>
+            <p style="color:var(--muted);margin:0 0 14px">${dlg.translation}</p>
+            <p style="font-weight:700;font-size:13.5px;margin-bottom:8px">Выбери, как лучше ответить:</p>
+            <div id="dlg_opts_${dlg.id}"></div>
+            <div id="dlg_exp_${dlg.id}" class="explanation-box hidden"></div>
+          `;
+          container.appendChild(block);
+
+          const optsDiv = block.querySelector(`#dlg_opts_${dlg.id}`);
+          const expDiv = block.querySelector(`#dlg_exp_${dlg.id}`);
+          dlg.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "option-btn";
+            btn.textContent = opt;
+            btn.onclick = () => {
+              const isCorrect = opt === dlg.correct;
+              btn.classList.add(isCorrect ? "correct" : "wrong");
+              expDiv.classList.remove("hidden");
+              expDiv.innerHTML = (isCorrect ? "✅ <strong>Верно!</strong> " : "❌ <strong>Обрати внимание:</strong> ") + dlg.explanation;
+              addPracticeMinute();
+            };
+            optsDiv.appendChild(btn);
+          });
+        });
+        return;
+      }
+
+      // Режим Грамматики
+      const topics = (window.KNOWLEDGE_BASE.grammar[lang] || []).filter(
+        t => selectedLevelFilter === "ALL" || t.level === selectedLevelFilter
+      );
+
+      topics.forEach(item => {
+        const block = document.createElement("div");
+        block.className = "card";
+        const examplesHtml = item.examples.map(ex => `<li>${ex}</li>`).join("");
+        block.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <span class="badge">Уровень ${item.level}</span>
+            <button type="button" class="chip" onclick="askTutorAboutTopic('${item.topic.replace(/'/g, "\'")}')">🤖 Разобрать тему с AI-репетитором</button>
+          </div>
+          <h3 style="margin:10px 0 8px;font-size:20px">${item.topic}</h3>
+          <p style="margin:0 0 10px">${item.rule}</p>
+          <ul style="margin:0 0 16px;padding-left:20px;color:#385072">${examplesHtml}</ul>
+          <div id="ex_list_${item.id}"></div>
+        `;
+        container.appendChild(block);
+
+        const exContainer = block.querySelector(`#ex_list_${item.id}`);
+        item.exercises.forEach(ex => {
+          const exBox = document.createElement("div");
+          exBox.style.borderTop = "1px solid var(--line)";
+          exBox.style.paddingTop = "14px";
+          exBox.style.marginTop = "14px";
+          exBox.innerHTML = `
+            <p style="font-weight:700;font-size:16px;margin:0 0 10px">Выбери правильный вариант: <span style="color:var(--blue-dark)">${ex.question}</span></p>
+            <div class="opts"></div>
+            <div class="explanation-box hidden"></div>
+          `;
+          exContainer.appendChild(exBox);
+
+          const optsWrap = exBox.querySelector(".opts");
+          const expWrap = exBox.querySelector(".explanation-box");
+
+          ex.options.forEach(opt => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "option-btn";
+            b.innerHTML = `<span>${opt}</span><span>○</span>`;
+            b.onclick = () => {
+              const isRight = opt === ex.correct;
+              b.classList.add(isRight ? "correct" : "wrong");
+              b.querySelector("span:last-child").textContent = isRight ? "✓" : "✕";
+              expWrap.classList.remove("hidden");
+              expWrap.innerHTML = (isRight ? "✅ <strong>Отлично!</strong> " : "❌ <strong>Разбор ошибки:</strong> ") + ex.explanation;
+              addPracticeMinute();
+
+              if (!isRight) {
+                const already = state.mistakes.some(m => m.question === ex.question);
+                if (!already) {
+                  state.mistakes.push({
+                    topic: item.topic,
+                    question: ex.question,
+                    correct: ex.correct,
+                    explanation: ex.explanation
+                  });
+                  saveState();
+                  renderDashboardStats();
+                }
+              }
+            };
+            optsWrap.appendChild(b);
+          });
+        });
+      });
+    }
+
+    function removeMistake(idx) {
+      state.mistakes.splice(idx, 1);
+      saveState();
+      renderDashboardStats();
+      renderLessonsSection();
+    }
+
+    function askTutorAboutTopic(topicName) {
+      switchTab("home");
+      sendQuickPrompt(`Объясни мне, пожалуйста, тему «${topicName}» на уровне ${state.level} и дай одно предложение для проверки.`);
+    }
+
+    // ------------------------------------------------------------------------
+    // СЛОВАРЬ И ФИЛЬМЫ + ОЗВУЧКА СЛОВ (WEB SPEECH API)
+    // ------------------------------------------------------------------------
+    function setDictFilter(mode) {
+      dictFilter = mode;
+      document.getElementById("dictAllBtn").classList.toggle("active", mode === "all");
+      document.getElementById("dictSavedBtn").classList.toggle("active", mode === "saved");
+      renderDictionaryList();
+    }
+
+    function toggleSaveWord(wordId) {
+      const idx = state.savedWords.indexOf(wordId);
+      if (idx === -1) state.savedWords.push(wordId);
+      else state.savedWords.splice(idx, 1);
+      saveState();
+      renderDashboardStats();
+      renderDictionaryList();
+    }
+
+    function renderDictionaryList() {
+      const wrap = document.getElementById("dictionaryList");
+      wrap.innerHTML = "";
+      const q = (document.getElementById("dictSearchInput").value || "").toLowerCase().trim();
+      const words = window.KNOWLEDGE_BASE.vocabulary[state.language] || [];
+
+      const filtered = words.filter(w => {
+        if (dictFilter === "saved" && !state.savedWords.includes(w.id)) return false;
+        if (!q) return true;
+        return w.word.toLowerCase().includes(q) || w.translation.toLowerCase().includes(q);
+      });
+
+      if (filtered.length === 0) {
+        wrap.innerHTML = `<p style="color:var(--muted)">Слова не найдены. Попробуй другой запрос или добавь слова звездочкой ⭐.</p>`;
+        return;
+      }
+
+      filtered.forEach(w => {
+        const isSaved = state.savedWords.includes(w.id);
+        const item = document.createElement("div");
+        item.style.border = "1px solid var(--line)";
+        item.style.borderRadius = "18px";
+        item.style.padding = "14px";
+        item.style.marginBottom = "10px";
+        item.style.background = "#f9fbff";
+        item.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <strong style="font-size:18px">${w.word}</strong>
+              <span style="color:var(--muted);font-size:13px;margin-left:6px">${w.transcription}</span>
+              <span class="badge" style="margin-left:6px">${w.level}</span>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button type="button" class="speak-btn" onclick="speakText('${w.word.replace(/'/g, "\'")}', '${state.language}')">🔊</button>
+              <button type="button" class="speak-btn" onclick="toggleSaveWord('${w.id}')">${isSaved ? "⭐ В словаре" : "☆ В словарь"}</button>
+            </div>
+          </div>
+          <div style="color:var(--blue-dark);font-weight:700;margin:4px 0">${w.translation} <small style="color:var(--muted);font-weight:500">(${w.partOfSpeech})</small></div>
+          <div style="font-size:13.5px;margin-top:6px"><strong>Пример:</strong> ${w.example} — <em>${w.exampleRu}</em></div>
+          <div style="font-size:12.5px;color:#5a6d87;margin-top:4px">💡 <strong>Нюанс:</strong> ${w.collocations}</div>
+        `;
+        wrap.appendChild(item);
+      });
+    }
+
+    function renderMoviesList() {
+      const wrap = document.getElementById("moviesList");
+      wrap.innerHTML = "";
+      const movies = window.KNOWLEDGE_BASE.movies[state.language] || [];
+      movies.forEach(m => {
+        const card = document.createElement("div");
+        card.style.border = "1px solid var(--line)";
+        card.style.borderRadius = "18px";
+        card.style.padding = "16px";
+        card.style.marginBottom = "12px";
+        card.style.background = "linear-gradient(135deg, #1b2a41, #2c4a78)";
+        card.style.color = "#fff";
+
+        const phrasesHtml = m.phrases.map(p => `
+          <div style="background:rgba(255,255,255,0.95);color:var(--ink);border-radius:14px;padding:12px;margin-top:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong>${p.original}</strong>
+              <button type="button" class="speak-btn" onclick="speakText('${p.original.replace(/'/g, "\'")}', '${state.language}')">🔊</button>
+            </div>
+            <div style="color:var(--blue-dark);font-size:13.5px;margin:3px 0">${p.translation}</div>
+            <small style="color:var(--muted)">${p.note}</small>
+          </div>
+        `).join("");
+
+        card.innerHTML = `
+          <small style="color:#a8c7ff;font-weight:700">${m.genre}</small>
+          <h3 style="margin:4px 0 8px;font-size:20px">🎬 ${m.title}</h3>
+          ${phrasesHtml}
+        `;
+        wrap.appendChild(card);
+      });
+    }
+
+    // ------------------------------------------------------------------------
+    // ОЗВУЧКА ОТВЕТОВ (TEXT-TO-SPEECH) И МИКРОФОН (SPEECH-TO-TEXT)
+    // ------------------------------------------------------------------------
+    function speakText(text, langCode) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = langCode === "es" ? "es-ES" : "en-US";
+      utter.rate = 0.95;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function initVoiceAndChat() {
+      const micBtn = document.getElementById("micBtn");
+      const chatInput = document.getElementById("chatInput");
+      const voiceStatus = document.getElementById("voiceStatus");
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        let isRecording = false;
+
+        micBtn.onclick = () => {
+          if (isRecording) {
+            recognition.stop();
+            return;
+          }
+          // Распознаем речь на изучаемом языке (английский или испанский)
+          recognition.lang = state.language === "es" ? "es-ES" : "en-US";
+          recognition.start();
+        };
+
+        recognition.onstart = () => {
+          isRecording = true;
+          micBtn.classList.add("recording");
+          voiceStatus.textContent = state.language === "es"
+            ? "🎙️ Слушаю тебя по-испански... Говори!"
+            : "🎙️ Слушаю тебя по-английски... Говори!";
+        };
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          chatInput.value = transcript;
+          voiceStatus.textContent = "✅ Распознано: «" + transcript + "»";
+        };
+
+        recognition.onerror = () => {
+          voiceStatus.textContent = "⚠️ Разреши доступ к микрофону в браузере (Chrome/Safari)";
+        };
+
+        recognition.onend = () => {
+          isRecording = false;
+          micBtn.classList.remove("recording");
+        };
+      } else {
+        micBtn.onclick = () => {
+          alert("Голосовой ввод лучше всего работает в браузерах Google Chrome, Safari и Edge.");
+        };
+      }
+
+      document.getElementById("chatForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+        chatInput.value = "";
+        await sendUserMessage(msg);
+      };
+    }
+
+    function greetInChat() {
+      const chatBox = document.getElementById("chatBox");
+      chatBox.innerHTML = "";
+      const langWord = state.language === "es" ? "испанский 🇪🇸" : "американский английский 🇺🇸";
+      const welcomeMsg = `Привет, ${state.name}! 💙 Я твой AI-репетитор (уровень ${state.level}, изучаем ${langWord}).
+
+Ты можешь писать мне на русском или на изучаемом языке, либо нажать на микрофон 🎤 и сказать фразу вслух — я внимательно выслушаю, мягко исправлю ошибки и всё объясню! О чём поговорим сегодня?`;
+      appendChatBubble(welcomeMsg, "tutor");
+    }
+
+    function appendChatBubble(text, role) {
+      const chatBox = document.getElementById("chatBox");
+      const b = document.createElement("div");
+      b.className = "bubble " + role;
+      b.textContent = text;
+
+      if (role === "tutor") {
+        const btnWrap = document.createElement("div");
+        const spk = document.createElement("button");
+        spk.type = "button";
+        spk.className = "speak-btn";
+        spk.innerHTML = "🔊 Прослушать";
+        spk.onclick = () => speakText(text, state.language);
+        btnWrap.appendChild(spk);
+        b.appendChild(btnWrap);
+      }
+
+      chatBox.appendChild(b);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return b;
+    }
+
+    function sendQuickPrompt(promptText) {
+      sendUserMessage(promptText);
+    }
+
+    async function sendUserMessage(message) {
+      appendChatBubble(message, "user");
+      addPracticeMinute();
+
+      const waitingBubble = appendChatBubble("Думаю и проверяю грамматику… 💙", "tutor");
+
+      try {
+        const response = await fetch(WORKER_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message,
+            userName: state.name,
+            level: state.level,
+            character: state.character,
+            weakTopics: state.mistakes.map(m => m.topic),
+            language: state.language === "es" ? "испанский" : "английский (американский вариант)",
+            history: chatHistory.slice(-12)
+          })
+        });
+
+        const data = await response.json();
+        waitingBubble.remove();
+
+        if (!response.ok || !data.answer) {
+          throw new Error(data.error || "Ошибка соединения");
+        }
+
+        appendChatBubble(data.answer, "tutor");
+        chatHistory.push({ role: "user", text: message }, { role: "model", text: data.answer });
+
+        if (document.getElementById("autoSpeakToggle").checked) {
+          // Озвучиваем фразы на изучаемом языке или ответ
+          speakText(data.answer, state.language);
+        }
+      } catch (err) {
+        waitingBubble.remove();
+        appendChatBubble(
+          `Отличный вопрос! Пока сервер ИИ обновляется, подскажу правило: для уровня ${state.level} старайся строить полные предложения и обращать внимание на время глагола. Попробуй отправить сообщение ещё раз через пару секунд! 💙`,
+          "tutor"
+        );
+      }
+    }
+
+    // Запуск приложения
+    initOnboarding();
+    initVoiceAndChat();
+  </script>
 </body>
 </html>

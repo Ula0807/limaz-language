@@ -1,0 +1,17 @@
+{
+  "name": "Мой AI-репетитор: Английский и Испанский",
+  "short_name": "AI-Репетитор",
+  "description": "Персональный ИИ-репетитор, полная база грамматики A1-C1, умный словарь и разговорная практика с голосом.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f2f7ff",
+  "theme_color": "#2f6fed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/4712/4712109.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
