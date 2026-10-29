@@ -1,251 +1,118 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мой AI-репетитор</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f2;
-      color: #242424;
-    }
-
-    header {
-      padding: 24px 20px;
-      background: #ffffff;
-      border-bottom: 1px solid #e8e8e4;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    header p {
-      margin: 8px 0 0;
-      color: #777;
-      font-size: 14px;
-    }
-
-    main {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 20px 16px;
-    }
-
-    .card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 3px 15px #00000008;
-    }
-
-    h2 {
-      font-size: 18px;
-      margin: 0 0 12px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 8px;
-      color: #666;
-    }
-
-    select, input, button {
-      font: inherit;
-      border-radius: 12px;
-    }
-
-    select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      background: white;
-      color: #242424;
-    }
-
-    .welcome {
-      background: #e8eee5;
-      line-height: 1.6;
-    }
-
-    #chat {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 160px;
-      max-height: 360px;
-      overflow-y: auto;
-      margin: 16px 0;
-    }
-
-    .message {
-      padding: 12px 14px;
-      border-radius: 14px;
-      max-width: 90%;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .tutor {
-      background: #f0f0ec;
-      align-self: flex-start;
-    }
-
-    .user {
-      background: #dce8d7;
-      align-self: flex-end;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    input {
-      width: 100%;
-      min-width: 0;
-      padding: 13px;
-      border: 1px solid #ddd;
-      outline-color: #758b70;
-    }
-
-    button {
-      border: none;
-      background: #354b36;
-      color: white;
-      padding: 13px 17px;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: 0.5;
-    }
-
-    .note {
-      color: #777;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#edf4ff">
+<title>Мой AI-репетитор</title>
+<style>
+:root{--blue:#3978e8;--blue2:#2458b8;--pale:#eaf2ff;--ink:#1f2d42;--muted:#718096;--line:#e3ebf6;--bg:#f4f7fc;--white:#fff;--green:#26966c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+button:focus-visible,input:focus-visible{outline:3px solid #8db7ff;outline-offset:2px}
+.primary{border:0;background:var(--blue);color:#fff;border-radius:13px;padding:13px 18px;font-weight:750;box-shadow:0 6px 15px #3978e82b}.primary:hover{background:var(--blue2)}
+/* First visit */
+.welcome-screen{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(130deg,#e7f1ff,#f8fbff 60%,#eaf3ff)}
+.welcome-art{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:35px;overflow:hidden;background:linear-gradient(160deg,#d9e8ff,#eff6ff 60%,#c7dcff)}
+.welcome-art:before,.welcome-art:after{content:"";position:absolute;border-radius:50%;background:#ffffff60}.welcome-art:before{width:360px;height:360px;top:-100px;left:-120px}.welcome-art:after{width:270px;height:270px;bottom:-100px;right:-50px}
+.logo{position:absolute;top:25px;left:28px;display:flex;align-items:center;gap:10px;font-weight:850;z-index:1}.logo-mark{width:38px;height:38px;border-radius:13px;background:var(--blue);color:white;display:grid;place-items:center}
+.welcome-characters{font-size:clamp(90px,13vw,170px);position:relative;z-index:1;filter:drop-shadow(0 15px 12px #315b8b25);white-space:nowrap}
+.welcome-slogan{position:relative;z-index:1;text-align:center;max-width:400px;margin-top:10px}.welcome-slogan h2{font-size:clamp(27px,4vw,43px);line-height:1.1;letter-spacing:-1px;margin:0 0 12px}.welcome-slogan p{margin:0;color:#536a89}
+.welcome-panel{display:flex;align-items:center;justify-content:center;padding:30px 22px}.welcome-form{width:min(100%,450px);background:#ffffffd9;border:1px solid #fff;border-radius:27px;padding:clamp(22px,4vw,38px);box-shadow:0 18px 55px #315b8b12;backdrop-filter:blur(12px)}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;font-weight:850;color:var(--blue2)}.welcome-form h1{font-size:clamp(29px,4vw,39px);letter-spacing:-1px;line-height:1.13;margin:8px 0 10px}.welcome-form .intro{color:var(--muted);margin:0 0 23px}
+label{display:block;font-size:13px;font-weight:750;color:#53647c;margin:16px 0 8px}.name-input{width:100%;padding:14px 15px;border:1px solid #dce5f2;border-radius:13px;background:white;color:var(--ink)}
+.language-picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}.language-pick{border:1px solid var(--line);border-radius:16px;background:white;padding:14px;text-align:left;color:var(--ink);display:flex;align-items:center;gap:10px;min-height:76px}.language-pick .flag{font-size:26px}.language-pick strong{display:block;font-size:14px}.language-pick small{display:block;color:var(--muted);font-size:12px}.language-pick.selected{border:2px solid var(--blue);background:#f1f6ff;padding:13px;color:var(--blue2)}.language-pick .check{margin-left:auto;color:var(--blue);font-weight:900;opacity:0}.language-pick.selected .check{opacity:1}
+.pick-note{font-size:12px;color:var(--muted);margin:10px 0 18px}.start{width:100%;font-size:15px}.privacy-note{text-align:center;font-size:11px;color:#8a97a9;margin:13px 0 0}
+.topbar{background:#ffffffed;border-bottom:1px solid var(--line);padding:14px 20px;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}.topbar-inner{max-width:1060px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:16px}.brand-mark{width:37px;height:37px;border-radius:13px;background:var(--blue);color:white;display:grid;place-items:center;font-size:20px}.top-actions{display:flex;align-items:center;gap:9px}.streak{background:#fff5e5;border:1px solid #ffe5b7;color:#925a00;border-radius:13px;padding:8px 11px;font-size:12px;font-weight:800;white-space:nowrap}.small-button{border:1px solid var(--line);background:white;border-radius:11px;padding:8px 10px;color:#53647c;font-size:12px;font-weight:700}
+main{max-width:1060px;margin:auto;padding:24px 18px 45px}.hero{display:grid;grid-template-columns:1.35fr .75fr;gap:17px;margin-bottom:17px}.hero-copy{background:linear-gradient(135deg,#e5efff,#f8fbff 75%);border:1px solid #d9e6fc;border-radius:24px;padding:26px}.hero-copy h1{font-size:clamp(27px,4vw,38px);line-height:1.13;letter-spacing:-1px;margin:9px 0 10px}.hero-copy p{color:#536782;margin:0 0 17px}.hero-art{border-radius:24px;background:linear-gradient(145deg,#c9dcff,#eaf3ff 65%,#d7e7ff);display:flex;align-items:center;justify-content:center;min-height:205px;position:relative;overflow:hidden}.hero-art .orb{position:absolute;width:170px;height:170px;border-radius:50%;background:#ffffff66;top:-50px;right:-30px}.character{font-size:92px;position:relative;z-index:1;filter:drop-shadow(0 10px 8px #274b7b20)}.art-caption{position:absolute;bottom:12px;left:12px;right:12px;text-align:center;background:#ffffffd9;border:1px solid #fff;border-radius:12px;padding:7px;font-size:12px;font-weight:750;color:#385276}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:17px}.stat,.card{background:white;border:1px solid var(--line);border-radius:19px;box-shadow:0 5px 18px #1c3d6807}.stat{padding:14px}.stat-label{font-size:12px;color:var(--muted);font-weight:650}.stat-value{font-size:24px;font-weight:850;margin:2px 0}.progress-track{height:7px;border-radius:99px;background:#edf1f8;overflow:hidden;margin-top:8px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#4c8cf3,#76b8ff);border-radius:99px;transition:width .3s}
+.layout{display:grid;grid-template-columns:.85fr 1.2fr;gap:17px;align-items:start}.card{padding:19px;margin-bottom:16px}.card h2{font-size:17px;margin:0 0 4px}.sub{font-size:12px;color:var(--muted);margin:0 0 14px}.language-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.lang-tab{border:1px solid var(--line);border-radius:99px;background:white;padding:8px 11px;color:#526781;font-size:12px;font-weight:750}.lang-tab.active{background:var(--blue);border-color:var(--blue);color:white}.character-options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.character-option{border:1px solid var(--line);background:white;border-radius:14px;padding:10px 6px;color:var(--ink);font-size:12px}.character-option .emoji{display:block;font-size:29px;margin-bottom:3px}.character-option.active{border:2px solid var(--blue);background:#f0f5ff;padding:9px 5px;color:var(--blue2);font-weight:800}
+.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.section-tile{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px 12px;text-align:left;color:var(--ink);min-height:105px}.section-tile.active{background:#f1f6ff;border-color:#a8c6ff}.tile-icon{display:block;font-size:23px;margin-bottom:7px}.section-tile strong{display:block;font-size:13px}.section-tile small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.chat-card{padding:0;overflow:hidden}.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar{width:41px;height:41px;border-radius:13px;background:var(--pale);display:grid;place-items:center;font-size:25px}.chat-head strong{display:block;font-size:14px}.online{font-size:11px;color:var(--green)}.chat-body{padding:17px;min-height:220px;max-height:350px;overflow:auto;display:flex;flex-direction:column;gap:10px}.bubble{max-width:93%;padding:11px 13px;border-radius:15px;font-size:13px;white-space:pre-wrap;overflow-wrap:anywhere}.bubble.tutor{background:#f0f4fa;border-top-left-radius:5px;align-self:flex-start}.bubble.user{background:#e5efff;border-top-right-radius:5px;align-self:flex-end}.chat-tools{display:flex;gap:7px;flex-wrap:wrap;padding:0 16px 13px}.chip{border:1px solid #dce6f7;background:#fff;color:#41618e;border-radius:99px;padding:7px 9px;font-size:11px}.chat-form{display:flex;gap:8px;padding:13px 15px;border-top:1px solid var(--line);background:#fbfcff}.chat-form input{min-width:0;flex:1;padding:11px 12px;border:1px solid #dce4f0;border-radius:12px;outline-color:var(--blue)}.chat-form button{border:0;border-radius:12px;background:var(--blue);color:white;padding:0 15px;font-weight:800}.notice{margin:0;padding:10px 16px 14px;color:var(--muted);font-size:11px;background:#fbfcff}
+.quiz-question{font-weight:750;font-size:15px;margin:14px 0}.answers{display:grid;gap:8px}.answer-option{border:1px solid var(--line);background:white;border-radius:12px;padding:11px;text-align:left;color:var(--ink);font-size:13px}.answer-option.selected{border:2px solid var(--blue);padding:10px;background:#f1f6ff}.answer-option.correct{border-color:#55b98e;background:#effaf5}.feedback{font-size:13px;margin-top:12px;color:#4c6583}.word-row{display:flex;gap:8px;margin:12px 0}.word-row input{min-width:0;width:100%;padding:10px;border:1px solid var(--line);border-radius:11px}.word-list{display:grid;gap:8px}.word-item{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 11px;font-size:13px}.word-item small{display:block;color:var(--muted)}.remove-word{border:0;background:#f2f6fc;color:#62738b;border-radius:8px;padding:5px 8px}.empty{font-size:13px;color:var(--muted);padding:14px;background:#f8faff;border-radius:12px}.footer{text-align:center;color:#8a96a8;font-size:12px;padding:10px}
+@media(max-width:760px){.welcome-screen{grid-template-columns:1fr}.welcome-art{min-height:245px;padding:20px}.logo{top:15px;left:16px}.welcome-characters{font-size:95px;margin-top:25px}.welcome-slogan h2{font-size:26px}.welcome-slogan p{font-size:13px}.welcome-panel{padding:18px 13px 28px}.welcome-form{padding:24px 20px}.hero{grid-template-columns:1fr}.hero-art{min-height:145px}.character{font-size:72px}.stats{gap:7px}.stat{padding:11px 9px}.stat-value{font-size:21px}.stat-label{font-size:10px}.layout{grid-template-columns:1fr}main{padding:17px 12px 32px}.card{padding:16px}.chat-card{padding:0}.topbar{padding:11px 12px}.brand{font-size:14px}.streak{font-size:11px;padding:7px 8px}.small-button{font-size:11px;padding:7px 8px}}
+</style>
 </head>
-
 <body>
-  <header>
-    <h1>Мой AI-репетитор</h1>
-    <p>Английский в твоём темпе</p>
-  </header>
-
-  <main>
-    <section class="card welcome">
-      <h2>Привет! 👋</h2>
-      Здесь ты можешь постепенно учить английский,
-      тренировать разговорную речь и разбирать ошибки.
-      Не бойся ошибаться - мы учимся шаг за шагом.
-    </section>
-
-    <section class="card">
-      <h2>Твоя практика</h2>
-
-      <label for="level">Уровень английского</label>
-      <select id="level">
-        <option value="beginner">Начальный - A1</option>
-        <option value="elementary">Базовый - A2</option>
-        <option value="intermediate">Средний - B1</option>
-        <option value="advanced">Продвинутый - B2+</option>
-      </select>
-
-      <div id="chat" aria-live="polite">
-        <div class="message tutor">
-          Давай начнём с простого!
-
-          Как сказать по-английски:
-          «По вечерам я люблю читать книги»?
-        </div>
+<section id="welcomeScreen" class="welcome-screen">
+  <div class="welcome-art">
+    <div class="logo"><span class="logo-mark">A</span> Мой AI-репетитор</div>
+    <div class="welcome-characters" aria-hidden="true">👩🏻‍🎓 🐻‍❄️</div>
+    <div class="welcome-slogan"><h2>Новые слова.<br>Новые возможности.</h2><p>Немного практики каждый день - и английский или испанский станет ближе.</p></div>
+  </div>
+  <div class="welcome-panel">
+    <form id="welcomeForm" class="welcome-form">
+      <div class="eyebrow">Твоё личное пространство</div>
+      <h1>Привет! 👋<br>Давай знакомиться</h1>
+      <p class="intro">Как тебя зовут и какой язык ты хочешь изучать? Мы подстроим занятия под тебя.</p>
+      <label for="userName">Как к тебе обращаться?</label>
+      <input id="userName" class="name-input" type="text" maxlength="30" placeholder="Напиши своё имя" autocomplete="given-name" required>
+      <label>Выбери направление</label>
+      <div class="language-picks">
+        <button type="button" class="language-pick selected" data-languages="en" aria-pressed="true"><span class="flag">🇺🇸</span><span><strong>Английский</strong><small>Американский вариант</small></span><span class="check">✓</span></button>
+        <button type="button" class="language-pick" data-languages="es" aria-pressed="false"><span class="flag">🇪🇸</span><span><strong>Испанский</strong><small>Живое общение</small></span><span class="check">✓</span></button>
+        <button type="button" class="language-pick" data-languages="both" aria-pressed="false" style="grid-column:1/-1"><span class="flag">🌎</span><span><strong>Оба языка</strong><small>Английский и испанский</small></span><span class="check">✓</span></button>
       </div>
+      <p class="pick-note">Можно будет менять направление позже в настройках.</p>
+      <button class="primary start" type="submit">Создать моё пространство →</button>
+      <p class="privacy-note">Имя и прогресс сохраняются в этом браузере на твоём устройстве.</p>
+    </form>
+  </div>
+</section>
 
-      <form id="form" class="input-row">
-        <input
-          id="answer"
-          type="text"
-          placeholder="Напиши ответ на английском..."
-          autocomplete="off"
-          required
-        >
-        <button type="submit">Ответить</button>
-      </form>
-
-      <p class="note" id="status">
-        Пока это демонстрационный режим.
-        Подключение настоящего AI будет следующим этапом.
-      </p>
-    </section>
-  </main>
-
-  <script>
-    const form = document.getElementById("form");
-    const input = document.getElementById("answer");
-    const chat = document.getElementById("chat");
-    const status = document.getElementById("status");
-
-    function addMessage(text, type) {
-      const message = document.createElement("div");
-      message.className = "message " + type;
-      message.textContent = text;
-      chat.appendChild(message);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      const answer = input.value.trim();
-      if (!answer) return;
-
-      addMessage(answer, "user");
-      input.value = "";
-
-      const normalized = answer
-        .toLowerCase()
-        .replace(/[.,!?]/g, "")
-        .replace(/\s+/g, " ")
-        .trim();
-
-      if (
-        normalized === "in the evening i like reading books" ||
-        normalized === "in the evenings i like reading books" ||
-        normalized === "i like reading books in the evening" ||
-        normalized === "i like reading books in the evenings"
-      ) {
-        addMessage(
-          "Отлично! 🎉 Ты правильно построила предложение.\n\n" +
-          "In the evenings, I like reading books.\n\n" +
-          "Попробуй теперь перевести: «Утром я пью кофе».",
-          "tutor"
-        );
-      } else {
-        addMessage(
-          "Спасибо за ответ! 😊\n\n" +
-          "Пока я работаю в демонстрационном режиме и не могу " +
-          "полноценно анализировать произвольные ответы.\n\n" +
-          "Следующим этапом подключим AI, который сможет проверять " +
-          "твои предложения, объяснять ошибки по-русски и продолжать диалог.",
-          "tutor"
-        );
-      }
-
-      status.textContent = "Демонстрационная практика";
-    });
-  </script>
+<div id="app" class="hidden">
+<header class="topbar"><div class="topbar-inner"><div class="brand"><span class="brand-mark">A</span> Мой AI-репетитор</div><div class="top-actions"><div class="streak">🔥 <span id="streak">0</span> дней подряд</div><button class="small-button" id="settingsBtn">Настройки</button></div></div></header>
+<main>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">Твой английский. Твой темп.</div><h1 id="greeting">Привет!</h1><p>Учись понимать живую речь, общайся на интересные темы и пополняй словарь. Без гонки и игровых заданий - в твоём темпе.</p><button class="primary" id="startPractice">Начать практику ↓</button></div><div class="hero-art"><div class="orb"></div><div class="character" id="heroCharacter">🐻‍❄️</div><div class="art-caption" id="heroCaption">Твой спокойный помощник</div></div></section>
+<section class="stats"><div class="stat"><div class="stat-label">Практика сегодня</div><div class="stat-value"><span id="todayMinutes">0</span> <small style="font-size:12px">мин из 10</small></div><div class="progress-track"><div class="progress-fill" id="dailyProgress"></div></div></div><div class="stat"><div class="stat-label">Дней с практикой</div><div class="stat-value" id="daysCount">0</div><div class="stat-label">Маленькие шаги важны 💙</div></div><div class="stat"><div class="stat-label">Мои слова</div><div class="stat-value" id="wordCount">0</div><div class="stat-label">В твоём словаре</div></div></section>
+<div class="layout"><aside>
+<section class="card"><h2>Мои языки</h2><p class="sub">Выбирай, чем хочешь заниматься сейчас</p><div id="languageTabs" class="language-tabs"></div><label>Выбери помощника</label><div class="character-options"><button class="character-option active" data-character="bear"><span class="emoji">🐻‍❄️</span>Белый мишка</button><button class="character-option" data-character="girl"><span class="emoji">👸🏻</span>Девушка</button></div></section>
+<section class="card"><h2>Что будем изучать?</h2><p class="sub">Программа и свободная практика</p><div class="section-grid"><button class="section-tile active" data-section="chat"><span class="tile-icon">💬</span><strong>Разговор с ИИ</strong><small>Любые темы, живая речь</small></button><button class="section-tile" data-section="grammar"><span class="tile-icon">📘</span><strong>Грамматика</strong><small>Выбирай правильный ответ</small></button><button class="section-tile" data-section="words"><span class="tile-icon">📚</span><strong>Новые слова</strong><small>Изучай и сохраняй в словарь</small></button><button class="section-tile" data-section="movies"><span class="tile-icon">🎬</span><strong>Фильмы и сериалы</strong><small>Разговорные фразы</small></button></div></section>
+<section class="card"><h2>Мой словарь</h2><p class="sub">Слова, которые ты сохранила</p><div class="word-row"><input id="wordSearch" placeholder="Найти слово..." aria-label="Найти слово"></div><div id="dictionary" class="word-list"></div></section>
+</aside>
+<div>
+<section class="card chat-card" id="practice"><div class="chat-head"><div class="avatar" id="chatAvatar">🐻‍❄️</div><div><strong id="chatTitle">Разговор с репетитором</strong><div class="online">● Готов к практике</div></div></div><div id="chatPanel"><div class="chat-body" id="chat" aria-live="polite"><div class="bubble tutor" id="helloBubble">Привет! 💙 Давай поговорим на английском. Можно ошибаться - я помогу учиться шаг за шагом.</div></div><div class="chat-tools"><button class="chip" data-prompt="Let's talk about my hobbies.">🎮 Увлечения</button><button class="chip" data-prompt="I want to understand English movies.">🎬 Фильмы</button><button class="chip" data-prompt="Let's talk about my day.">☕ Мой день</button></div><form class="chat-form" id="chatForm"><input id="chatInput" placeholder="Напиши сообщение..." autocomplete="off" required><button type="submit" aria-label="Отправить">➤</button></form></div><div id="grammarPanel" class="hidden" style="padding:18px"><p class="sub" id="grammarLevel">Короткая практика</p><div class="quiz-question" id="quizQuestion">She ___ coffee every morning.</div><div class="answers" id="answers"></div><div id="feedback" class="feedback" aria-live="polite"></div><button class="primary" id="nextQuestion" style="margin-top:14px">Следующий вопрос</button></div><div id="wordsPanel" class="hidden" style="padding:18px"><p class="sub">Выучи полезное слово, а затем добавь его в личный словарь.</p><div class="quiz-question" id="studyWord">opportunity</div><p id="studyMeaning" style="margin:0;color:#526781">возможность</p><p id="studyExample" style="font-size:13px;color:#718096">This is a great opportunity. - Это отличная возможность.</p><button class="primary" id="saveStudyWord">＋ Добавить в словарь</button><button class="small-button" id="nextWord">Другое слово</button></div><div id="moviesPanel" class="hidden" style="padding:18px"><p class="sub">Разговорные фразы, которые часто слышно в сериалах и фильмах.</p><div class="quiz-question" id="moviePhrase">“Are you kidding me?”</div><p id="movieMeaning">«Ты шутишь?» / «Да ладно!» - зависит от ситуации.</p><button class="primary" id="nextPhrase">Следующая фраза</button></div><p class="notice" id="notice">Это первая версия интерфейса: чат пока демонстрационный. Для настоящего диалога с ИИ потребуется безопасное подключение к AI через сервер.</p></section>
+</div></div><div class="footer">Каждый маленький шаг - это прогресс. 💙</div>
+</main></div>
+<script>
+const $=id=>document.getElementById(id),KEY="limazTutorProfileV2";
+let profile={};try{profile=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+let chosenLanguages=profile.languages||["en"],activeLanguage=chosenLanguages.includes("en")?"en":"es",character=profile.character||"bear",section="chat",quizIndex=0,wordIndex=0,phraseIndex=0,selectedAnswer=null;
+const wordBank={en:[{word:"opportunity",meaning:"возможность",example:"This is a great opportunity. - Это отличная возможность."},{word:"confident",meaning:"уверенный в себе",example:"I feel more confident. - Я чувствую себя увереннее."},{word:"figure out",meaning:"разобраться, понять",example:"I'll figure it out. - Я разберусь."},{word:"actually",meaning:"на самом деле, вообще-то",example:"Actually, I agree. - Вообще-то, я согласна."},{word:"hang out",meaning:"проводить время вместе",example:"We hang out on weekends. - Мы проводим время вместе по выходным."}],es:[{word:"aprovechar",meaning:"воспользоваться, использовать с пользой",example:"Quiero aprovechar el día. - Я хочу провести день с пользой."},{word:"aunque",meaning:"хотя",example:"Aunque estoy cansada, voy. - Хотя я устала, я иду."},{word:"quedar",meaning:"встречаться; договариваться",example:"¿Quedamos mañana? - Встретимся завтра?"},{word:"ojalá",meaning:"хоть бы; надеюсь, что",example:"Ojalá tengas razón. - Надеюсь, ты прав."},{word:"apetecer",meaning:"хотеться (о еде/занятии)",example:"Me apetece un café. - Мне хочется кофе."}]};
+const quizzes={en:[{q:"She ___ to the gym every morning.",a:["go","goes","going","gone"],correct:1,why:"С he/she/it в Present Simple к глаголу обычно добавляется -s: she goes."},{q:"Yesterday, I ___ a movie.",a:["watch","watched","watches","watching"],correct:1,why:"Yesterday указывает на прошлое, поэтому используем watched."},{q:"I ___ never seen this series.",a:["have","has","am","did"],correct:0,why:"С I в Present Perfect используем have: I have never seen..."}],es:[{q:"Yo ___ café por la mañana.",a:["bebo","bebe","bebes","beber"],correct:0,why:"С yo используется форма bebo: yo bebo café."},{q:"Ayer nosotros ___ al cine.",a:["vamos","fuimos","va","ir"],correct:1,why:"Ayer - вчера. Прошедшая форма ir для nosotros: fuimos."},{q:"¿Cómo ___ llamas?",a:["me","te","se","nos"],correct:1,why:"В вопросе «Как тебя зовут?» говорят: ¿Cómo te llamas?"}]};
+const phrases={en:[["“Are you kidding me?”","«Ты шутишь?» / «Да ладно!» - зависит от ситуации."],["“It’s up to you.”","«Решать тебе» / «Как хочешь»."],["“I’m just saying.”","«Я просто говорю» - часто, когда человек смягчает своё мнение." ]],es:[["“¿Qué te pasa?”","«Что с тобой?» / «Что случилось?» - зависит от тона."],["“No pasa nada.”","«Ничего страшного» / «Всё нормально»."],["“Ya veremos.”","«Посмотрим» / «Там видно будет»." ] ]};
+function save(){localStorage.setItem(KEY,JSON.stringify(profile))}
+function todayKey(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function renderWelcome(){if(profile.name&&profile.languages?.length){$("welcomeScreen").classList.add("hidden");$("app").classList.remove("hidden");initApp()}else{$("welcomeScreen").classList.remove("hidden");$("app").classList.add("hidden");$("userName").value=profile.name||"";setLanguageButtons(profile.languages||["en"])}}
+function setLanguageButtons(langs){document.querySelectorAll(".language-pick").forEach(b=>{let val=b.dataset.languages,selected=val==="both"?langs.length===2:langs.length===1&&langs[0]===val;b.classList.toggle("selected",selected);b.setAttribute("aria-pressed",String(selected))})}
+document.querySelectorAll(".language-pick").forEach(b=>b.addEventListener("click",()=>{let val=b.dataset.languages;chosenLanguages=val==="both"?["en","es"]:[val];setLanguageButtons(chosenLanguages)}));
+$("welcomeForm").addEventListener("submit",e=>{e.preventDefault();let name=$("userName").value.trim();if(!name){$("userName").focus();return}profile.name=name;profile.languages=chosenLanguages;profile.days=profile.days||[];profile.minutes=profile.minutes||{};profile.words=profile.words||[];profile.character=profile.character||"bear";save();renderWelcome()});
+function initApp(){profile.days=profile.days||[];profile.minutes=profile.minutes||{};profile.words=profile.words||[];activeLanguage=profile.languages.includes("en")?"en":"es";character=profile.character||"bear";$("greeting").innerHTML="Привет, "+escapeHtml(profile.name)+"!<br>Рада тебя видеть 💙";renderLangTabs();renderCharacter();renderProgress();renderDictionary();showSection("chat");}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderLangTabs(){$("languageTabs").innerHTML="";profile.languages.forEach(lang=>{let b=document.createElement("button");b.className="lang-tab"+(activeLanguage===lang?" active":"");b.textContent=lang==="en"?"🇺🇸 Английский":"🇪🇸 Испанский";b.onclick=()=>{activeLanguage=lang;renderLangTabs();refreshSection()};$("languageTabs").appendChild(b)})}
+function renderCharacter(){let emoji=character==="bear"?"🐻‍❄️":"👸🏻";$("heroCharacter").textContent=emoji;$("chatAvatar").textContent=emoji;$("heroCaption").textContent=character==="bear"?"Твой добрый белый мишка":"Твоя девушка-репетитор";document.querySelectorAll(".character-option").forEach(b=>b.classList.toggle("active",b.dataset.character===character))}
+document.querySelectorAll(".character-option").forEach(b=>b.addEventListener("click",()=>{character=b.dataset.character;profile.character=character;save();renderCharacter()}));
+function streak(){let days=[...new Set(profile.days||[])].sort().reverse();if(!days.length)return 0;let d=new Date();d.setHours(0,0,0,0);let y=new Date(d);y.setDate(y.getDate()-1);const fmt=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");if(days[0]!==fmt(d)&&days[0]!==fmt(y))return 0;let n=0,c=new Date(days[0]+"T12:00:00");for(let day of days){if(day===fmt(c)){n++;c.setDate(c.getDate()-1)}else if(day<fmt(c))break}return n}
+function renderProgress(){let t=todayKey();$("streak").textContent=streak();$("daysCount").textContent=(profile.days||[]).length;$("todayMinutes").textContent=profile.minutes[t]||0;$("dailyProgress").style.width=Math.min(100,(profile.minutes[t]||0)*10)+"%";$("wordCount").textContent=(profile.words||[]).length}
+function recordPractice(){let t=todayKey();if(!profile.days.includes(t))profile.days.push(t);profile.minutes[t]=Math.min(10,(profile.minutes[t]||0)+1);save();renderProgress()}
+function showSection(s){section=s;document.querySelectorAll(".section-tile").forEach(b=>b.classList.toggle("active",b.dataset.section===s));["chat","grammar","words","movies"].forEach(x=>$(x+"Panel").classList.toggle("hidden",x!==s));$("chatPanel").classList.toggle("hidden",s!=="chat");$("chatTitle").textContent=({chat:"Разговор с репетитором",grammar:"Грамматика",words:"Новые слова",movies:"Фразы из фильмов"})[s];$("notice").textContent=s==="chat"?"Это прототип интерфейса: для настоящего свободного диалога с ИИ потребуется безопасное подключение к AI через сервер.":"Упражнения и словарь уже работают в этом прототипе. Прогресс хранится в браузере на этом устройстве.";if(s==="grammar")renderQuiz();if(s==="words")renderStudyWord();if(s==="movies")renderPhrase()}
+document.querySelectorAll(".section-tile").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
+function refreshSection(){if(section==="grammar")renderQuiz();if(section==="words")renderStudyWord();if(section==="movies")renderPhrase();renderDictionary()}
+function renderQuiz(){let q=quizzes[activeLanguage][quizIndex%quizzes[activeLanguage].length];selectedAnswer=null;$("quizQuestion").textContent=q.q;$("feedback").textContent="";$("answers").innerHTML="";q.a.forEach((a,i)=>{let b=document.createElement("button");b.className="answer-option";b.textContent=String.fromCharCode(65+i)+". "+a;b.onclick=()=>{if(selectedAnswer!==null)return;selectedAnswer=i;b.classList.add("selected");if(i===q.correct){b.classList.add("correct");$("feedback").textContent="Правильно! 💙 "+q.why;recordPractice()}else{$("feedback").textContent="Почти! Правильный ответ: "+q.a[q.correct]+". "+q.why;[...$("answers").children][q.correct].classList.add("correct")}};$("answers").appendChild(b)})}
+$("nextQuestion").onclick=()=>{quizIndex++;renderQuiz()};
+function currentWord(){return wordBank[activeLanguage][wordIndex%wordBank[activeLanguage].length]}
+function renderStudyWord(){let w=currentWord();$("studyWord").textContent=w.word;$("studyMeaning").textContent=w.meaning;$("studyExample").textContent=w.example;$("saveStudyWord").textContent=profile.words.some(x=>x.word===w.word&&x.lang===activeLanguage)?"✓ Уже в словаре":"＋ Добавить в словарь"}
+$("nextWord").onclick=()=>{wordIndex++;renderStudyWord()};
+$("saveStudyWord").onclick=()=>{let w=currentWord();if(!profile.words.some(x=>x.word===w.word&&x.lang===activeLanguage)){profile.words.unshift({...w,lang:activeLanguage});save();recordPractice();renderDictionary();renderProgress()}renderStudyWord()};
+function renderDictionary(){let q=($("wordSearch")?.value||"").toLowerCase();let words=(profile.words||[]).filter(w=>(w.word+" "+w.meaning).toLowerCase().includes(q));$("dictionary").innerHTML="";if(!words.length){$("dictionary").innerHTML='<div class="empty">Пока словарь пуст. Добавляй сюда новые слова - они сохранятся на этом устройстве.</div>';return}words.forEach((w,i)=>{let row=document.createElement("div");row.className="word-item";let left=document.createElement("div");left.innerHTML="<strong>"+escapeHtml(w.word)+"</strong><small>"+(w.lang==="en"?"🇺🇸":"🇪🇸")+" "+escapeHtml(w.meaning)+"</small>";let del=document.createElement("button");del.className="remove-word";del.textContent="×";del.setAttribute("aria-label","Удалить "+w.word);del.onclick=()=>{profile.words.splice(profile.words.indexOf(w),1);save();renderDictionary();renderProgress()};row.append(left,del);$("dictionary").appendChild(row)})}
+$("wordSearch").addEventListener("input",renderDictionary);
+function renderPhrase(){let p=phrases[activeLanguage][phraseIndex%phrases[activeLanguage].length];$("moviePhrase").textContent=p[0];$("movieMeaning").textContent=p[1]}
+$("nextPhrase").onclick=()=>{phraseIndex++;renderPhrase();recordPractice()};
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{$("chatInput").value=b.dataset.prompt;$("chatInput").focus()});
+$("chatForm").addEventListener("submit",e=>{e.preventDefault();let t=$("chatInput").value.trim();if(!t)return;addBubble(t,"user");$("chatInput").value="";recordPractice();setTimeout(()=>addBubble(activeLanguage==="en"?"Thanks for sharing! 💙 I can show examples and help you practise. The full AI conversation will be connected in a later version.":"¡Gracias por compartirlo! 💙 Puedo mostrar ejemplos para practicar. La conversación completa con IA se conectará en una próxima versión.","tutor"),180)});
+function addBubble(t,type){let b=document.createElement("div");b.className="bubble "+type;b.textContent=t;$("chat").appendChild(b);$("chat").scrollTop=$("chat").scrollHeight}
+$("startPractice").onclick=()=>$("practice").scrollIntoView({behavior:"smooth",block:"start"});
+$("settingsBtn").onclick=()=>{if(confirm("Вернуться к приветствию, чтобы изменить имя и языки? Текущий прогресс и словарь сохранятся.")){profile.name="";save();renderWelcome()}};
+renderWelcome();
+</script>
 </body>
 </html>
